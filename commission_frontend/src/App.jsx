@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css"
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Header from "./components/layout/Header"
+import Footer from "./components/layout/Footer"
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -28,6 +30,8 @@ function App() {
             }
           />
         </Routes>
+
+        <Footer/>
       </BrowserRouter>
     </AuthProvider>
   );
