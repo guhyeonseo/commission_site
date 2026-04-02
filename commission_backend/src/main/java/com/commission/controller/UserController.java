@@ -47,7 +47,11 @@ public class UserController {
 	        entity.getPassword()
 	    );
 
-	    String token = jwtUtil.createToken(user.getUsername(),user.getNickname());
+	    String token = jwtUtil.createToken(
+	    		user.getUsername(),
+	    		user.getNickname(),
+	    		user.getRole()
+	    );
 
 	    return Map.of("token", token);
 	}

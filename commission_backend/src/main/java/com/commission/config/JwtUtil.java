@@ -14,10 +14,11 @@ public class JwtUtil {
 	
 	private final long expiration = 1000 * 60 * 60;
 	
-	public String createToken(String username, String nickname) {
+	public String createToken(String username, String nickname, String role) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("nickname", nickname)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key)
