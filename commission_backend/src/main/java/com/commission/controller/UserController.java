@@ -1,16 +1,19 @@
 package com.commission.controller;
+ 
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.PostMapping; 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.commission.config.JwtUtil;
 import com.commission.entity.UserEntity;
 import com.commission.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+ 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	
 	private final UserService userService;
+	
+	private final JwtUtil jwtUtil;
 	
 	@PostMapping("/register")
 	public String register(@RequestBody UserEntity entity) {
@@ -35,13 +40,15 @@ public class UserController {
 	}
     // 로그인
 	@PostMapping("/login")
-	public UserEntity login(@RequestBody UserEntity entity) {
+	public Map<String, String> login(@RequestBody UserEntity entity) {
 
-	    log.info("로그인 성공");
-
-	    return userService.login(
+	    UserEntity user = userService.login(
 	        entity.getUsername(),
 	        entity.getPassword()
 	    );
+
+	    String token = jwtUtil.createToken(user.getUsername(),user.getNickname());
+
+	    return Map.of("token", token);
 	}
 }

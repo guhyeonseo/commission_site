@@ -9,10 +9,21 @@ export const useLogin = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (form) => {
-    const res = await loginApi(form);
+    try {
+      const res = await loginApi(form);
 
-    login(res.data);     // 상태 저장
-    navigate("/");       // 홈 이동
+      const token = res.data?.token;
+
+      if (!token) {
+        throw new Error("토큰 없음");
+      }
+
+      login(token);           // context + localStorage 저장
+      navigate("/");          // 홈 이동
+    } catch (err) {
+      console.error("로그인 실패:", err);
+      alert("아이디 또는 비밀번호가 틀렸습니다.");
+    }
   };
 
   return { login: handleLogin };
