@@ -3,12 +3,12 @@ import { AuthContext } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 
 const Header = () => {
-  const { token, logout } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
 
   let nickname = null;
 
-  if (token) {
-    const decoded = jwtDecode(token);
+  if (auth.token) {
+    const decoded = jwtDecode(auth.token);
     nickname = decoded.nickname;
   }
 
@@ -16,7 +16,7 @@ const Header = () => {
     <div>
       <h2>사이트</h2>
 
-      {token ? (
+      {auth.token ? (
         <>
           <span>{nickname}님</span>
           <button onClick={logout}>로그아웃</button>

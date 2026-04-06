@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
+    const savedToken = localStorage.getItem("accessToken");
 
     if (savedToken) {
       try {
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
         });
       } catch (e) {
         console.error("토큰 decode 실패");
-        localStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
       }
     }
   }, []);
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
     const role = decoded.role; 
 
-    localStorage.setItem("token", token);
+    localStorage.setItem("accessToken", token);
 
     setAuth({
       token,
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
 
     setAuth({
       token: null,

@@ -1,20 +1,21 @@
 package com.commission.config;
 
-import java.security.Key;
+import java.security.Key; 
 import java.util.Date;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 public class JwtUtil {
 	
-	private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-	
-	private final long expiration = 1000 * 60 * 60;
-	
-	public String createToken(String username, String nickname, String role) {
+	private final String SECRET = "my-secret-key-my-secret-key-my-secret-key";
+    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+
+    private final long expiration = 1000 * 60 * 60;
+
+    public String createToken(String username, String nickname, String role) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("nickname", nickname)
@@ -25,23 +26,29 @@ public class JwtUtil {
                 .compact();
     }
 
-    // 토큰에서 username 추출
     public String getUsername(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return parse(token).getSubject();
     }
 
-    // 토큰 유효성 검사
+    // 🔥 추가 (핵심)
+    public String getRole(String token) {
+        return parse(token).get("role", String.class);
+    }
+
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            parse(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
+    }
+
+    private Claims parse(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
