@@ -10,16 +10,11 @@ export const useLogin = () => {
 
   const handleLogin = async (form) => {
     try {
-      const res = await loginApi(form);
+      const token = await loginApi(form); // 토큰 받기
 
-      const token = res.data?.token;
+      login(token); // AuthContext에 저장
 
-      if (!token) {
-        throw new Error("토큰 없음");
-      }
-
-      login(token);           // context + localStorage 저장
-      navigate("/");          // 홈 이동
+      navigate("/");
     } catch (err) {
       console.error("로그인 실패:", err);
       alert("아이디 또는 비밀번호가 틀렸습니다.");

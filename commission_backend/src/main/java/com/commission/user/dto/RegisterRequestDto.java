@@ -1,4 +1,4 @@
-package com.commission.dto.user;
+package com.commission.user.dto;
 
 import lombok.Data;
 

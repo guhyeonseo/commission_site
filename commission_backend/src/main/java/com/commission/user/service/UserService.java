@@ -1,12 +1,12 @@
-package com.commission.service;
+package com.commission.user.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder; 
 import org.springframework.stereotype.Service;
 
-import com.commission.domain.user.UserEntity;
-import com.commission.domain.user.UserRole;
-import com.commission.dto.user.RegisterRequestDto;
-import com.commission.repository.UserRepository;
+import com.commission.user.dto.RegisterRequestDto;
+import com.commission.user.entity.UserEntity;
+import com.commission.user.entity.UserRole;
+import com.commission.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,5 +52,11 @@ public class UserService {
         }
 
         return user;
+    }
+    
+    public Long getUserIdByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow()
+                .getId();
     }
 }

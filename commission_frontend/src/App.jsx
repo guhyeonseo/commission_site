@@ -11,17 +11,29 @@ import Footer from "./components/layout/Footer";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import CommissionListPage from "./pages/CommissionListPage";
+import CommissionDetailPage from "./pages/CommissionDetailPage";
+import CommissionCreatePage from "./pages/CommissionCreatePage";
 
 function AppInner() {
-  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
-    if (auth.token) {
-      apiClient.get("/user/me")
-        .then(res => console.log("유저:", res.data))
-        .catch(err => console.error(err));
-    }
-  }, [auth.token]);
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    apiClient.get("/user/me")
+      .then(res => {
+        setAuth({
+          token,
+          user: res.data
+        });
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+      });
+
+  }, []); 
 
   return (
     <BrowserRouter>
@@ -31,6 +43,33 @@ function AppInner() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+
+        <Route
+          path="/commissionList"
+          element={
+            <ProtectedRoute>
+              <CommissionListPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/commission/:id"
+          element={
+            <ProtectedRoute>
+              <CommissionDetailPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/create"
+          element={
+            <ProtectedRoute>
+              <CommissionCreatePage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/admin"

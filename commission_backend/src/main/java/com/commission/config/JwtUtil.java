@@ -14,7 +14,8 @@ public class JwtUtil {
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     private final long expiration = 1000 * 60 * 60;
-
+//    private final long expiration = 1000 * 20;
+    
     public String createToken(String username, String nickname, String role) {
         return Jwts.builder()
                 .setSubject(username)
@@ -25,12 +26,22 @@ public class JwtUtil {
                 .signWith(key)
                 .compact();
     }
+    
+    private final long refreshExpiration = 1000L * 60 * 60 * 24 * 7;
+    
+    public String createRefreshToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
+                .signWith(key)
+                .compact();
+    }
 
     public String getUsername(String token) {
         return parse(token).getSubject();
     }
 
-    // 🔥 추가 (핵심)
     public String getRole(String token) {
         return parse(token).get("role", String.class);
     }

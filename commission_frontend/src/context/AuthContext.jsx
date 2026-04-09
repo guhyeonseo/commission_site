@@ -9,6 +9,8 @@ export const AuthProvider = ({ children }) => {
     role: null,
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const savedToken = localStorage.getItem("accessToken");
 
@@ -16,27 +18,54 @@ export const AuthProvider = ({ children }) => {
       try {
         const decoded = jwtDecode(savedToken);
 
-        setAuth({
-          token: savedToken,
-          role: decoded.role, 
-        });
+        if (decoded.exp < Date.now() / 1000) {
+          localStorage.removeItem("accessToken");
+          setAuth({ token: null, role: null });
+        } else {
+          setAuth({
+            token: savedToken,
+            role: decoded.role,
+          });
+        }
+
       } catch (e) {
-        console.error("토큰 decode 실패");
         localStorage.removeItem("accessToken");
       }
     }
+
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (!auth.token) return;
+
+    const decoded = jwtDecode(auth.token);
+    const expTime = decoded.exp * 1000;
+    const now = Date.now();
+
+    const timeout = expTime - now;
+
+    if (timeout <= 0) {
+      logout();
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      logout(); 
+    }, timeout);
+
+    return () => clearTimeout(timer);
+
+  }, [auth.token]);
 
   const login = (token) => {
     const decoded = jwtDecode(token);
-
-    const role = decoded.role; 
 
     localStorage.setItem("accessToken", token);
 
     setAuth({
       token,
-      role,
+      role: decoded.role,
     });
   };
 
@@ -50,7 +79,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout }}>
+    <AuthContext.Provider value={{ auth, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

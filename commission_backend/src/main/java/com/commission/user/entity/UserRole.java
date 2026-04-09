@@ -1,4 +1,4 @@
-package com.commission.domain.user;
+package com.commission.user.entity;
 
 public enum UserRole {
 	USER,

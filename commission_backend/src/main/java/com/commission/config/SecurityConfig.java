@@ -52,7 +52,9 @@ public class SecurityConfig {
 	        .csrf(csrf -> csrf.disable())
 	        .authorizeHttpRequests(auth -> auth
 	        		.requestMatchers("/api/user/register", "/api/user/login").permitAll()
-	        	    .anyRequest().authenticated()
+//	        	    .anyRequest().authenticated()
+//					테스트용 전역 허용
+	        		.anyRequest().permitAll()
 	        )
 	        .addFilterBefore(new JwtFilter(jwtUtil),
 	        		UsernamePasswordAuthenticationFilter.class);

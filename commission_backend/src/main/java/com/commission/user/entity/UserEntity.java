@@ -1,4 +1,4 @@
-package com.commission.domain.user;
+package com.commission.user.entity;
 
 import java.time.LocalDateTime;  
 
