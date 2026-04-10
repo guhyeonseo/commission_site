@@ -3,6 +3,8 @@ import { AuthContext } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../services/apiClient";
+import "./Header.css"
+import logo from "../../assets/logo.png";
 
 const Header = () => {
   const { auth, logout } = useContext(AuthContext);
@@ -17,33 +19,39 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await apiClient.post("/user/logout"); 
-    } catch (e) {}
+      await apiClient.post("/user/logout");
+    } catch (e) { }
 
-    logout(); 
-    navigate("/login"); 
+    logout();
+    navigate("/login");
   };
 
   return (
-    <div>
-      <h2>사이트</h2>
+    <div className="headerContainer">
 
-      {auth.token ? (
-        <>
-          <span>{nickname}님</span>
-          <button onClick={() => navigate("/create")}>등록</button>
-          <button onClick={() => navigate("/commissionList")}>
-            커미션 목록
-          </button>
-          <button onClick={handleLogout}>로그아웃</button>
-        </>
-      ) : (
-        <>
-          <a href="/">홈 </a>
-          <a href="/login">로그인 </a>
-          <a href="/register">회원가입</a>
-        </>
-      )}
+      <div className="headerHome">
+        <a href="/">
+          <img src={logo} alt="홈" className="logo" />
+        </a>
+      </div>
+
+      <div className="headerCategory">
+        {auth.token ? (
+          <>
+            <span className="ddd">{nickname}님</span>
+            <button onClick={() => navigate("/create")}>등록</button>
+            <button onClick={() => navigate("/commissionList")}>
+              커미션 목록
+            </button>
+            <button onClick={handleLogout}>로그아웃</button>
+          </>
+        ) : (
+          <>
+            <a href="/login">로그인 </a>
+            <a href="/register">회원가입</a>
+          </>
+        )}
+      </div>
     </div>
   );
 };

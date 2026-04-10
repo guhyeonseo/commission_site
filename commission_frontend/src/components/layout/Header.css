@@ -1,0 +1,27 @@
+.headerContainer {
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  /* 좌우 분리 핵심 */
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+}
+
+.headerHome {
+  font-weight: bold;
+  padding-left: 300px;
+}
+
+.headerCategory {
+  display: flex;
+  gap: 10px;
+  /* 버튼 간격 */
+  align-items: center;
+  padding-right: 300px;
+}
+
+.logo {
+  height: 40px;
+  object-fit: contain;
+}
