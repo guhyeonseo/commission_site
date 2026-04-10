@@ -10,7 +10,6 @@
 
 .headerHome {
   font-weight: bold;
-  padding-left: 300px;
 }
 
 .headerCategory {
@@ -18,10 +17,16 @@
   gap: 10px;
   /* 버튼 간격 */
   align-items: center;
-  padding-right: 300px;
+  justify-content: flex-end;
+  margin-right: 200px;
 }
 
 .logo {
   height: 40px;
   object-fit: contain;
+  margin-left: 200px;
+}
+
+.nickname{
+  position: relative;
 }

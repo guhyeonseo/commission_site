@@ -36,13 +36,13 @@ const Header = () => {
       </div>
 
       <div className="headerCategory">
+        <button onClick={() => navigate("/commissionList")}>
+          커미션 목록
+        </button>
+
         {auth.token ? (
           <>
-            <span className="ddd">{nickname}님</span>
-            <button onClick={() => navigate("/create")}>등록</button>
-            <button onClick={() => navigate("/commissionList")}>
-              커미션 목록
-            </button>
+            <span className="nickname">{nickname}님</span>
             <button onClick={handleLogout}>로그아웃</button>
           </>
         ) : (
