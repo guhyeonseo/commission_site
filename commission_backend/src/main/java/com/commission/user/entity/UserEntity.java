@@ -14,12 +14,15 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name="users")
 public class UserEntity {
 
@@ -41,6 +44,16 @@ public class UserEntity {
 
 //    @Column(nullable = false)
 //    private boolean emailVerified = false;
+    
+    @Column(name = "profile_image", length = 255)
+    private String profileImage;
+
+    @Column(columnDefinition = "TEXT", nullable = true)
+    private String bio;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -51,19 +64,25 @@ public class UserEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-//    @Column(name = "updated_at")
-//    private LocalDateTime updatedAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+
         if (this.role == null) {
             this.role = UserRole.USER;
         }
+
+        if (this.status == null) {
+            this.status = UserStatus.ACTIVE;
+        }
     }
 
-//    @PreUpdate
-//    public void preUpdate() {
-//        this.updatedAt = LocalDateTime.now();
-//    }
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

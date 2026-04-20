@@ -199,7 +199,6 @@ export default function CommissionCreatePage() {
       setContent(editor.getHTML());
     },
 
-    // 🔥 여기 추가
     editorProps: {
       handlePaste(view, event) {
         const items = event.clipboardData?.items;
