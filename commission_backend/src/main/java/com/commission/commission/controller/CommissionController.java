@@ -76,4 +76,9 @@ public class CommissionController {
     public List<CommissionResponseDto> getList() {
         return commissionService.getList();
     }
+    
+    @PostMapping("/upload")
+    public String upload(@RequestParam("file") MultipartFile file) throws Exception {
+        return fileService.saveFile(file);
+    }
 }

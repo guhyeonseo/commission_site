@@ -36,7 +36,7 @@ const Header = () => {
       </div>
 
       <div className="headerCategory">
-        <button onClick={() => navigate("/commissionList")}>
+        <button className="headerList" onClick={() => navigate("/commissionList")}>
           커미션 목록
         </button>
 
@@ -47,8 +47,8 @@ const Header = () => {
           </>
         ) : (
           <>
-            <a href="/login">로그인 </a>
-            <a href="/register">회원가입</a>
+            <a className="headerLogin" href="/login">로그인 </a>
+            <a className="headerRegister" href="/register">회원가입</a>
           </>
         )}
       </div>

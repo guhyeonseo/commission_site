@@ -1,24 +1,23 @@
 .headerContainer {
-  height: 80px;
+  height: 65px;
   display: flex;
   justify-content: space-between;
   /* 좌우 분리 핵심 */
   align-items: center;
-  padding: 10px 20px;
+  padding: 0px 20px;
   background-color: #4CAF50;
 }
 
-.headerHome {
+/* .headerHome {
   font-weight: bold;
-}
+} */
 
 .headerCategory {
   display: flex;
-  gap: 10px;
-  /* 버튼 간격 */
   align-items: center;
   justify-content: flex-end;
   margin-right: 200px;
+  height: 100%;
 }
 
 .logo {
@@ -29,4 +28,49 @@
 
 .nickname{
   position: relative;
+}
+
+.headerList{
+  all: unset;
+  cursor: pointer;
+  background-color: #4CAF50;
+  height: 100%;  
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerList:hover{
+  background-color: #359238;
+}
+
+.headerLogin{
+  all: unset;
+  cursor: pointer;
+  background-color: #4CAF50;
+  height: 100%;  
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerLogin:hover{
+  background-color: #359238;
+}
+
+.headerRegister{
+  all: unset;
+  cursor: pointer;
+  background-color: #4CAF50;
+  height: 100%;  
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerRegister:hover{
+  background-color: #359238;
 }

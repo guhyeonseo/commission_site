@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class commissionImageEntity {
+public class CommissionImageEntity {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

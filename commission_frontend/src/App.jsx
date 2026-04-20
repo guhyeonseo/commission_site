@@ -45,15 +45,7 @@ function AppInner() {
         <Route path="/register" element={<RegisterPage />} />
 
         <Route path="/commissionList" element= {<CommissionListPage />}/>
-
-        <Route
-          path="/commission/:id"
-          element={
-            <ProtectedRoute>
-              <CommissionDetailPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/commission/:id" element= {<CommissionDetailPage />}/>
 
         <Route
           path="/create"

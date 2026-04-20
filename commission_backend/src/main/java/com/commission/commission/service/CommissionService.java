@@ -9,7 +9,7 @@ import com.commission.commission.dto.CommissionCreateDto;
 import com.commission.commission.dto.CommissionResponseDto;
 import com.commission.commission.dto.CommissionUpdateDto;
 import com.commission.commission.entity.CommissionEntity;
-import com.commission.commission.entity.commissionImageEntity;
+import com.commission.commission.entity.CommissionImageEntity;
 import com.commission.commission.repository.CommissionRepository;
 
 import jakarta.transaction.Transactional;
@@ -40,12 +40,13 @@ public class CommissionService {
 	        c.setCategory(dto.getCategory());
 	        c.setStatus("OPEN");
 
-	        List<commissionImageEntity> imageList = new ArrayList<>();
+	        List<CommissionImageEntity> imageList = new ArrayList<>();
 
 	        if (imageUrls != null && !imageUrls.isEmpty()) {
 	            for (String url : imageUrls) {
-	                commissionImageEntity img = new commissionImageEntity();
+	                CommissionImageEntity img = new CommissionImageEntity();
 	                img.setImageUrl(url);
+
 	                img.setCommission(c);
 	                imageList.add(img);
 	            }
@@ -53,13 +54,19 @@ public class CommissionService {
 
 	        c.setImages(imageList);
 
-	        // 썸네일 설정
+	        int index = 0;
+
+	        if (thumbnailIndex != null) {
+	            index = thumbnailIndex;
+	        }
+
+	        // 범위 강제 보정
+	        if (index < 0 || index >= imageList.size()) {
+	            index = 0;
+	        }
+
 	        if (!imageList.isEmpty()) {
-	            if (thumbnailIndex != null && thumbnailIndex < imageList.size()) {
-	                c.setThumbnailUrl(imageList.get(thumbnailIndex).getImageUrl());
-	            } else {
-	                c.setThumbnailUrl(imageList.get(0).getImageUrl());
-	            }
+	            c.setThumbnailUrl(imageList.get(index).getImageUrl());
 	        }
 
 	        return CommissionResponseDto.from(repository.save(c));

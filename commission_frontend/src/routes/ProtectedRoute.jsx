@@ -9,6 +9,7 @@ function ProtectedRoute({ children, role }) {
 
   // 로그인 안 됨
   if (!auth.token) {
+    alert("이 서비스를 이용하시려면 로그인이 필요합니다.");
     return <Navigate to="/login" />;
   }
 

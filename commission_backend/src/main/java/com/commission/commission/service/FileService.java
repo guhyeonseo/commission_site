@@ -12,6 +12,11 @@ public class FileService {
 	private final String uploadDir = "C:/uploads/"; 
 
     public String saveFile(MultipartFile file) throws Exception {
+    	
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs(); 
+        }
 
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 

@@ -75,7 +75,7 @@ public class CommissionEntity {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "commission", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<commissionImageEntity> images = new ArrayList<>();
+    private List<CommissionImageEntity> images = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
