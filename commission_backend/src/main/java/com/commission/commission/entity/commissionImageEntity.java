@@ -15,11 +15,14 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "commission_image")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -32,7 +35,7 @@ public class CommissionImageEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    // 🔥 FK 주인 (중요)
+    // FK 주인
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commission_id", nullable = false)
     private CommissionEntity commission;

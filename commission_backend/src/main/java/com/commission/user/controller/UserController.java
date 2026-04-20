@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping; 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,13 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.commission.config.JwtUtil;
 import com.commission.user.dto.LoginRequestDto;
+import com.commission.user.dto.PasswordUpdateRequestDto;
 import com.commission.user.dto.RegisterRequestDto;
+import com.commission.user.dto.UserResponseDto;
+import com.commission.user.dto.UserUpdateRequestDto;
 import com.commission.user.entity.UserEntity;
 import com.commission.user.service.UserService;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
  
@@ -33,13 +38,13 @@ public class UserController {
 	private final JwtUtil jwtUtil;
 	
 	@PostMapping("/register")
-	public String register(@RequestBody RegisterRequestDto dto) {
+	 public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDto dto) {
 		
         userService.register(dto);
 
 	    log.info("회원가입 성공");
 	    
-	    return "회원가입 성공";
+	    return ResponseEntity.ok("회원가입 성공");
 	}
     // 로그인
 	@PostMapping("/login")
@@ -112,6 +117,33 @@ public class UserController {
 
 	    return ResponseEntity.ok().build();
 	}
+	// 유저 정보 조회
+    @GetMapping("/users/me")
+    public ResponseEntity<UserResponseDto> getMyInfo(Authentication authentication) {
+        UserResponseDto response = userService.getMyInfo(authentication.getName());
+        return ResponseEntity.ok(response);
+    }
+    
+    // 유저 정보 수정
+    @PatchMapping("/users/me")
+    public ResponseEntity<?> updateUser(
+            Authentication authentication,
+            @Valid @RequestBody UserUpdateRequestDto dto
+    ) {
+        userService.updateUser(authentication.getName(), dto);
+        return ResponseEntity.ok("수정 완료");
+    }
+
+    // 비밀번호 변경
+    @PatchMapping("/users/password")
+    public ResponseEntity<?> updatePassword(
+            Authentication authentication,
+            @Valid @RequestBody PasswordUpdateRequestDto dto
+    ) {
+        userService.updatePassword(authentication.getName(), dto);
+        return ResponseEntity.ok("비밀번호 변경 완료");
+    }
+
 	
 	@GetMapping("/me")
 	public Map<String, Object> me(Authentication auth) {
