@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCommissionList } from "../features/commission/api/commissionApi.js";
+import { getCommissionList } from "../api/commissionApi.js";
 import { Link } from "react-router-dom";
 
 export default function CommissionListPage() {

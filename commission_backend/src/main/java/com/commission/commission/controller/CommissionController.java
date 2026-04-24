@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.commission.commission.dto.CommissionCreateDto;
 import com.commission.commission.dto.CommissionResponseDto;
 import com.commission.commission.service.CommissionService;
-import com.commission.commission.service.FileService;
+import com.commission.common.file.FileService;
 import com.commission.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ public class CommissionController {
 
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
-                imageUrls.add(fileService.saveFile(file));
+            	imageUrls.add(fileService.saveFile(file, "commission"));
             }
         }
 
@@ -79,6 +79,6 @@ public class CommissionController {
     
     @PostMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file) throws Exception {
-        return fileService.saveFile(file);
+    	return fileService.saveFile(file, "temp");
     }
 }

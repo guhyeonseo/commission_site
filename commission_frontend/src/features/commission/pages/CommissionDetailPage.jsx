@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getCommissionDetail } from "../features/commission/api/commissionApi.js";
+import { getCommissionDetail } from "../api/commissionApi.js";
 import "./CommissionDetailPage.css";
 
 export default function CommissionDetailPage() {

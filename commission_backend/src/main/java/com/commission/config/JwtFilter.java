@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -26,13 +27,17 @@ public class JwtFilter extends OncePerRequestFilter{
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-
+    	
+    	 System.out.println("🔥 JWT 필터 진입: " + request.getRequestURI());
+    	
         if (request.getMethod().equals("OPTIONS")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String header = request.getHeader("Authorization");
+        
+        System.out.println("Authorization: " + header);
 
         if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);

@@ -44,6 +44,7 @@ const Header = () => {
           <>
             <span className="nickname">{nickname}님</span>
             <button onClick={handleLogout}>로그아웃</button>
+            <a className="headerMyPage" href="/myPage">마이페이지</a>
           </>
         ) : (
           <>

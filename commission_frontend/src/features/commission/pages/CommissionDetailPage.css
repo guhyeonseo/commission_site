@@ -55,7 +55,7 @@
   transition: 0.2s;
 }
 
-.thumbnail-list img:hover {
+.thumbnail-list img:hover { 
   opacity: 1;
 }
 

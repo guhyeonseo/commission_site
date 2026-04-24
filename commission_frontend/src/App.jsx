@@ -8,12 +8,14 @@ import apiClient from "./services/apiClient";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import CommissionListPage from "./pages/CommissionListPage";
-import CommissionDetailPage from "./pages/CommissionDetailPage";
-import CommissionCreatePage from "./pages/CommissionCreatePage";
+import HomePage from "./features/home/pages/HomePage";
+import LoginPage from "./features/auth/pages/LoginPage";
+import RegisterPage from "./features/auth/pages/RegisterPage";
+import CommissionListPage from "./features/commission/pages/CommissionListPage";
+import CommissionDetailPage from "./features/commission/pages/CommissionDetailPage";
+import CommissionCreatePage from "./features/commission/pages/CommissionCreatePage";
+
+import Mypage from "./features/user/pages/MyPage";
 
 function AppInner() {
 
@@ -46,6 +48,8 @@ function AppInner() {
 
         <Route path="/commissionList" element= {<CommissionListPage />}/>
         <Route path="/commission/:id" element= {<CommissionDetailPage />}/>
+
+        <Route path="/mypage" element= {<Mypage />}/>
 
         <Route
           path="/create"

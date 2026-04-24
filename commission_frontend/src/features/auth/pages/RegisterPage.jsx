@@ -1,5 +1,5 @@
-import RegisterForm from "../features/auth/components/RegisterForm";
-import { useRegister } from "../features/auth/hooks/useRegister";
+import RegisterForm from "../components/RegisterForm";
+import { useRegister } from "../hooks/useRegister";
 
 const RegisterPage = () => {
   const { register } = useRegister();

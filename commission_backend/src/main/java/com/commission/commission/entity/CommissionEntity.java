@@ -63,7 +63,7 @@ public class CommissionEntity {
     private int orderCount = 0;
 
     @Column(name = "avg_rating")
-    private float avgRating = 0;
+    private Double avgRating = 0.0;
 
     @Column(name = "review_count")
     private int reviewCount = 0;

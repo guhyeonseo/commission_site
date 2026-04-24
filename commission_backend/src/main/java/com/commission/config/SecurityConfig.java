@@ -2,63 +2,65 @@ package com.commission.config;
 
 import org.springframework.context.annotation.Bean; 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig {
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-	    CorsConfiguration config = new CorsConfiguration();
+	 @Bean
+	    public PasswordEncoder passwordEncoder() {
+	        return new BCryptPasswordEncoder();
+	    }
 
-	    config.setAllowCredentials(true);
+	    @Bean
+	    public JwtUtil jwtUtil() {
+	        return new JwtUtil();
+	    }
 
-	    config.addAllowedOriginPattern("*"); 
-	    config.addAllowedHeader("*");
-	    config.addAllowedMethod("*");
+	    @Bean
+	    public JwtFilter jwtFilter() {
+	        return new JwtFilter(jwtUtil());
+	    }
 
-	    config.addExposedHeader("Authorization"); 
+	    @Bean
+	    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+	        org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
 
-	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	    source.registerCorsConfiguration("/**", config);
+	        config.setAllowCredentials(true);
 
-	    return source;
-	}
-	
-	
-	@Bean
-    public JwtUtil jwtUtil() {
-        return new JwtUtil();
-    }
+	        config.addAllowedOrigin("http://localhost:5173"); 
+	        config.addAllowedHeader("*");
+	        config.addAllowedMethod("*");
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, JwtUtil jwtUtil) throws Exception {
+	        config.addExposedHeader("Authorization");
 
-	    http
-	    	.cors(cors -> {})
-	        .csrf(csrf -> csrf.disable())
-	        .authorizeHttpRequests(auth -> auth
-	        		.requestMatchers("/api/user/register", "/api/user/login").permitAll()
-//	        	    .anyRequest().authenticated()
-//					테스트용 전역 허용
-	        		.anyRequest().permitAll()
-	        )
-	        .addFilterBefore(new JwtFilter(jwtUtil),
-	        		UsernamePasswordAuthenticationFilter.class);
+	        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
+	                new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
 
-	    return http.build();
-	}
+	        source.registerCorsConfiguration("/**", config);
+
+	        return source;
+	    }
+	    
+	    @Bean
+	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+	    	System.out.println("필터실행!!!!!!!!!!!!!@@@@@@@@@");
+	    	
+	        http
+	        	.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+	            .csrf(csrf -> csrf.disable())
+	            .authorizeHttpRequests(auth -> auth
+	                .requestMatchers("/api/user/register", "/api/user/login").permitAll()
+	                .requestMatchers("/api/user/me").authenticated()
+	                .anyRequest().permitAll()
+	            )
+	            .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+
+	        return http.build();
+	    }
 }

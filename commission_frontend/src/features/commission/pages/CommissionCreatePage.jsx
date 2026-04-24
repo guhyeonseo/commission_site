@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { createCommission } from "../features/commission/api/commissionApi.js";
+import { createCommission } from "../api/commissionApi.js";
 import { useNavigate } from "react-router-dom";
 import "./CommissionCreatePage.css";
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -23,7 +23,7 @@ import {
 import { Extension } from "@tiptap/core";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
-import apiClient from "../services/apiClient"; // 경로 맞게
+import apiClient from "../../../services/apiClient.js"; // 경로 맞게
 
 export default function CommissionCreatePage() {
 

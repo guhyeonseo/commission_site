@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.commission.common.file.FileService;
 import com.commission.user.dto.PasswordUpdateRequestDto;
 import com.commission.user.dto.RegisterRequestDto;
 import com.commission.user.dto.UserResponseDto;
@@ -21,6 +22,8 @@ public class UserService {
 	private final UserRepository userRepository;
 	
 	private final PasswordEncoder passwordEncoder;
+	
+	private final FileService fileService;
 
     // 회원가입
     public void register(RegisterRequestDto dto) {
@@ -58,17 +61,21 @@ public class UserService {
         return user;
     }
     
-    // 유저 정보 조회
-    public void updateUser(String username, UserUpdateRequestDto dto) {
+    @Transactional
+    public void updateUser(String username, UserUpdateRequestDto dto, String imageUrl) {
 
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
         user.setNickname(dto.getNickname());
         user.setBio(dto.getBio());
+        
+        if (imageUrl != null) {
+            fileService.deleteFile(user.getProfileImage()); // 기존 이미지 삭제
+            user.setProfileImage(imageUrl);
+        }
     }
     
-    // 유저 정보 수정
     @Transactional(readOnly = true)
     public UserResponseDto getMyInfo(String username) {
 
@@ -78,6 +85,7 @@ public class UserService {
         return UserResponseDto.from(user);
     }
     
+    @Transactional
     public void updatePassword(String username, PasswordUpdateRequestDto dto) {
 
         UserEntity user = userRepository.findByUsername(username)
@@ -86,7 +94,11 @@ public class UserService {
         if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
             throw new IllegalArgumentException("현재 비밀번호가 틀립니다.");
         }
-
+        
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
+        }
+        
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
     }
     

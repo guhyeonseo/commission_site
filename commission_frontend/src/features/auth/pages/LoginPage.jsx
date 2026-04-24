@@ -1,5 +1,5 @@
-import LoginForm from "../features/auth/components/LoginForm";
-import { useLogin } from "../features/auth/hooks/useLogin";
+import LoginForm from "../components/LoginForm";
+import { useLogin } from "../hooks/useLogin";
 
 const LoginPage = () => {
   const { login } = useLogin();

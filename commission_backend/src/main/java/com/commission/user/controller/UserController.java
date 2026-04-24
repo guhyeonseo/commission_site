@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping; 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.commission.common.file.FileService;
 import com.commission.config.JwtUtil;
 import com.commission.user.dto.LoginRequestDto;
 import com.commission.user.dto.PasswordUpdateRequestDto;
@@ -26,12 +29,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
- 
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
+
+    private final FileService fileService;
 	
 	private final UserService userService;
 	
@@ -118,24 +123,38 @@ public class UserController {
 	    return ResponseEntity.ok().build();
 	}
 	// 유저 정보 조회
-    @GetMapping("/users/me")
-    public ResponseEntity<UserResponseDto> getMyInfo(Authentication authentication) {
+    @GetMapping("/me")
+    public ResponseEntity<?> getMyInfo(Authentication authentication) {
+    	
+        if (authentication == null) {
+            return ResponseEntity.status(401).body("로그인 필요");
+        }
+
         UserResponseDto response = userService.getMyInfo(authentication.getName());
         return ResponseEntity.ok(response);
     }
     
     // 유저 정보 수정
-    @PatchMapping("/users/me")
+    @PatchMapping("/me")
     public ResponseEntity<?> updateUser(
-            Authentication authentication,
-            @Valid @RequestBody UserUpdateRequestDto dto
-    ) {
-        userService.updateUser(authentication.getName(), dto);
+            Authentication auth,	
+            @RequestPart(value = "data") UserUpdateRequestDto dto,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) throws Exception {
+
+        String imageUrl = null;
+
+        if (file != null) {
+            imageUrl = fileService.saveFile(file, "profile");
+        }
+
+        userService.updateUser(auth.getName(), dto, imageUrl);
+
         return ResponseEntity.ok("수정 완료");
     }
 
     // 비밀번호 변경
-    @PatchMapping("/users/password")
+    @PatchMapping("/password")
     public ResponseEntity<?> updatePassword(
             Authentication authentication,
             @Valid @RequestBody PasswordUpdateRequestDto dto
@@ -144,12 +163,4 @@ public class UserController {
         return ResponseEntity.ok("비밀번호 변경 완료");
     }
 
-	
-	@GetMapping("/me")
-	public Map<String, Object> me(Authentication auth) {
-	    return Map.of(
-	        "username", auth.getName(),
-	        "role", auth.getAuthorities()
-	    );
-	}
 }

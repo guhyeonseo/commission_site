@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     token: null,
     role: null,
+    exp: null,
   });
 
   const [loading, setLoading] = useState(true);
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }) => {
     setAuth({
       token,
       role: decoded.role,
+      exp: decoded.exp,
     });
   };
 
