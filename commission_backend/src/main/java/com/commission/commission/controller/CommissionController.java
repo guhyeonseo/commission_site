@@ -47,7 +47,7 @@ public class CommissionController {
     ) throws Exception {
 
     	String username = auth.getName();
-    	Long userId = userService.getUserIdByUsername(username);
+    	Long userId = (Long) auth.getPrincipal();
     	
         List<String> imageUrls = new ArrayList<>();
 

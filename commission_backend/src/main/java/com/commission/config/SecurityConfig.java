@@ -3,6 +3,8 @@ package com.commission.config;
 import org.springframework.context.annotation.Bean; 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -47,19 +49,40 @@ public class SecurityConfig {
 	    }
 	    
 	    @Bean
+	    public WebSecurityCustomizer webSecurityCustomizer() {
+	        return web -> web.ignoring().requestMatchers("/uploads/**");
+	    }
+	    
+	    @Bean
 	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-	    	System.out.println("필터실행!!!!!!!!!!!!!@@@@@@@@@");
-	    	
 	        http
-	        	.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 	            .csrf(csrf -> csrf.disable())
-	            .authorizeHttpRequests(auth -> auth
-	                .requestMatchers("/api/user/register", "/api/user/login").permitAll()
-	                .requestMatchers("/api/user/me").authenticated()
-	                .anyRequest().permitAll()
+	            .cors(cors -> {})
+	            .sessionManagement(session ->
+	                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	            )
-	            .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+
+	            .authorizeHttpRequests(auth -> auth
+	            		
+	                .requestMatchers(
+	                    "/api/user/login",
+	                    "/api/user/register",
+	                    "/api/user/refresh"
+	                ).permitAll()
+	                
+	                .requestMatchers(
+	                        "/api/commissions",
+	                        "/api/commissions/**",
+	                        "/api/inquiries/**"
+	                    ).permitAll()
+	                
+	                .requestMatchers("/uploads/**").permitAll()
+	                .anyRequest().authenticated()
+	            )
+
+	            .addFilterBefore(jwtFilter(),
+	            	    UsernamePasswordAuthenticationFilter.class);
 
 	        return http.build();
 	    }

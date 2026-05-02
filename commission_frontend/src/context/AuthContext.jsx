@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useContext } from "react";
 
 export const AuthContext = createContext();
 
@@ -18,6 +19,7 @@ export const AuthProvider = ({ children }) => {
     if (savedToken) {
       try {
         const decoded = jwtDecode(savedToken);
+        console.log("decoded:", decoded);
 
         if (decoded.exp < Date.now() / 1000) {
           localStorage.removeItem("accessToken");
@@ -26,6 +28,8 @@ export const AuthProvider = ({ children }) => {
           setAuth({
             token: savedToken,
             role: decoded.role,
+            exp: decoded.exp,
+            userId: decoded.sub
           });
         }
 
@@ -52,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const timer = setTimeout(() => {
-      logout(); 
+      logout();
     }, timeout);
 
     return () => clearTimeout(timer);
@@ -68,6 +72,7 @@ export const AuthProvider = ({ children }) => {
       token,
       role: decoded.role,
       exp: decoded.exp,
+      userId: decoded.sub
     });
   };
 
@@ -86,3 +91,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);

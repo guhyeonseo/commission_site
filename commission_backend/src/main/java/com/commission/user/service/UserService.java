@@ -62,47 +62,48 @@ public class UserService {
     }
     
     @Transactional
-    public void updateUser(String username, UserUpdateRequestDto dto, String imageUrl) {
+    public void updateUser(Long userId, UserUpdateRequestDto dto, String imageUrl) {
 
-        UserEntity user = userRepository.findByUsername(username)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
         user.setNickname(dto.getNickname());
         user.setBio(dto.getBio());
-        
+
         if (imageUrl != null) {
-            fileService.deleteFile(user.getProfileImage()); // 기존 이미지 삭제
+            fileService.deleteFile(user.getProfileImage());
             user.setProfileImage(imageUrl);
         }
     }
     
-    @Transactional(readOnly = true)
-    public UserResponseDto getMyInfo(String username) {
-
-        UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
-
-        return UserResponseDto.from(user);
-    }
-    
     @Transactional
-    public void updatePassword(String username, PasswordUpdateRequestDto dto) {
+    public void updatePassword(Long userId, PasswordUpdateRequestDto dto) {
 
-        UserEntity user = userRepository.findByUsername(username)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
         if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
             throw new IllegalArgumentException("현재 비밀번호가 틀립니다.");
         }
-        
+
         if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
             throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
         }
-        
+
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
     }
     
+    @Transactional(readOnly = true)
+    public UserResponseDto getMyInfo(Long userId) {
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow();
+
+        return UserResponseDto.from(user);
+    }
+    
     public Long getUserIdByUsername(String username) {
+    	System.out.println("@#@#@#@#susername: " + username);
         return userRepository.findByUsername(username)
                 .orElseThrow()
                 .getId();

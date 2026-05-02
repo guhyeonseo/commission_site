@@ -9,7 +9,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long>{
 
 	boolean existsByOrderId(Long orderId);
 
-    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.order.commission.id = :commissionId")
+    @Query("SELECT AVG(r.rating) FROM ReviewEntity  r WHERE r.order.commission.id = :commissionId")
     Double getAvgRating(Long commissionId);
 
     int countByOrder_Commission_Id(Long commissionId);

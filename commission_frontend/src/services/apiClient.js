@@ -9,6 +9,10 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
 
+  if (config.url.includes("/user/refresh")) {
+    return config;
+  }
+
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token}`;
@@ -29,7 +33,7 @@ apiClient.interceptors.response.use(
 
       try {
         // refresh 요청
-        const res = await apiClient.post("/auth/refresh");
+        const res = await apiClient.post("/user/refresh");
 
         const newAccessToken = res.data.accessToken;
 

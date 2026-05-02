@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCommissionDetail } from "../api/commissionApi.js";
+
+import InquiryForm from "@/features/inquiry/components/InquiryForm";
+import InquiryList from "@/features/inquiry/components/InquiryList";
+
 import "./CommissionDetailPage.css";
 
 export default function CommissionDetailPage() {
+  const [refresh, setRefresh] = useState(false);
+
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -73,6 +79,19 @@ export default function CommissionDetailPage() {
         className="description"
         dangerouslySetInnerHTML={{ __html: fixedDescription }}
       />
+
+      <div style={{ marginTop: "40px" }}>
+        <InquiryForm
+          commissionId={id}
+          onSuccess={() => setRefresh(!refresh)}
+        />
+
+        <InquiryList
+          commissionId={id}
+          refresh={refresh}
+        />
+      </div>
     </div>
+
   );
 }

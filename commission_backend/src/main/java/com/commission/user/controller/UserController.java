@@ -21,6 +21,7 @@ import com.commission.user.dto.RegisterRequestDto;
 import com.commission.user.dto.UserResponseDto;
 import com.commission.user.dto.UserUpdateRequestDto;
 import com.commission.user.entity.UserEntity;
+import com.commission.user.repository.UserRepository;
 import com.commission.user.service.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -41,6 +42,8 @@ public class UserController {
 	private final UserService userService;
 	
 	private final JwtUtil jwtUtil;
+	
+	private final UserRepository userRepository;
 	
 	@PostMapping("/register")
 	 public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDto dto) {
@@ -64,12 +67,13 @@ public class UserController {
 	    );
 
 	    String accessToken = jwtUtil.createToken(
+	    		user.getId(),
 	            user.getUsername(),
 	            user.getNickname(),
 	            user.getRole().name()
 	    );
 	    
-	    String refreshToken = jwtUtil.createRefreshToken(user.getUsername());
+	    String refreshToken = jwtUtil.createRefreshToken(user.getId());
 	    
 	    Cookie cookie = new Cookie("refreshToken", refreshToken);
 	    cookie.setHttpOnly(true);
@@ -99,13 +103,18 @@ public class UserController {
 	    if (refreshToken == null || !jwtUtil.validateToken(refreshToken)) {
 	        return ResponseEntity.status(401).build();
 	    }
-	    
-	    String username = jwtUtil.getUsername(refreshToken);
+
+	    // userId 기반으로 변경
+	    Long userId = jwtUtil.getUserId(refreshToken);
+
+	    UserEntity user = userRepository.findById(userId)
+	            .orElseThrow(() -> new RuntimeException("유저 없음: " + userId));
 
 	    String newAccessToken = jwtUtil.createToken(
-	            username,
-	            "", // nickname 필요 없으면 빈값
-	            "USER" // 나중에 DB에서 꺼내도 됨
+	            user.getId(),
+	            user.getUsername(),
+	            user.getNickname(),
+	            user.getRole().name()
 	    );
 
 	    return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
@@ -126,11 +135,13 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<?> getMyInfo(Authentication authentication) {
     	
-        if (authentication == null) {
-            return ResponseEntity.status(401).body("로그인 필요");
-        }
+    	if (authentication == null || !authentication.isAuthenticated()) {
+    	    return ResponseEntity.status(401).body("로그인 필요");
+    	}
+        
+        Long userId = (Long) authentication.getPrincipal();
 
-        UserResponseDto response = userService.getMyInfo(authentication.getName());
+        UserResponseDto response = userService.getMyInfo(userId);
         return ResponseEntity.ok(response);
     }
     
@@ -141,6 +152,8 @@ public class UserController {
             @RequestPart(value = "data") UserUpdateRequestDto dto,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) throws Exception {
+    	
+    	Long userId = (Long) auth.getPrincipal();
 
         String imageUrl = null;
 
@@ -148,7 +161,7 @@ public class UserController {
             imageUrl = fileService.saveFile(file, "profile");
         }
 
-        userService.updateUser(auth.getName(), dto, imageUrl);
+        userService.updateUser(userId, dto, imageUrl);
 
         return ResponseEntity.ok("수정 완료");
     }
@@ -156,10 +169,13 @@ public class UserController {
     // 비밀번호 변경
     @PatchMapping("/password")
     public ResponseEntity<?> updatePassword(
-            Authentication authentication,
-            @Valid @RequestBody PasswordUpdateRequestDto dto
+            Authentication auth,
+            @RequestBody PasswordUpdateRequestDto dto
     ) {
-        userService.updatePassword(authentication.getName(), dto);
+    	Long userId = (Long) auth.getPrincipal();
+
+        userService.updatePassword(userId, dto);
+
         return ResponseEntity.ok("비밀번호 변경 완료");
     }
 
