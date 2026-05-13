@@ -11,6 +11,7 @@ public class InquiryResponse {
 
 	private Long id;
     private Long writerId;
+    private String nickname;
     private String content;
     private boolean isSecret;
     private boolean canView;

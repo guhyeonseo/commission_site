@@ -23,7 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Table(name = "review")
-public class ReviewEntity {
+public class Review {
 
 	 @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class ReviewEntity {
 	    // 주문 (1:1)
 	    @OneToOne
 	    @JoinColumn(name = "order_id", nullable = false, unique = true)
-	    private OrderEntity order;
+	    private Order order;
 
 	    @Column(name = "writer_id", nullable = false)
 	    private Long writerId;

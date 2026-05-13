@@ -12,7 +12,8 @@ import InquiryForm from "./InquiryForm";
 export default function InquiryItem({
   item,
   onRefresh,
-  commissionId
+  commissionId,
+  commissionUserId
 }) {
 
   const [editMode, setEditMode] = useState(false);
@@ -75,7 +76,7 @@ export default function InquiryItem({
             fontSize: "12px",
             color: "#888"
           }}>
-            작성자: {item.writerId}
+            작성자: {item.nickname}
           </div>
 
           {editMode ? (
@@ -101,26 +102,33 @@ export default function InquiryItem({
 
             <div>
               {item.parentId && "ㄴ "}
+
+              {item.isSecret && "[비밀글] "}
+
               {item.content}
             </div>
 
           )}
 
           {/* 수정 삭제 */}
-          {item.writerId === auth.userId && !editMode && (
+          {(item.writerId === Number(auth.userId) ||
+            commissionUserId === Number(auth.userId)) &&
+            !editMode && (
 
-            <div>
+              <div>
 
-              <button onClick={() => setEditMode(true)}>
-                수정
-              </button>
+                {item.writerId === Number(auth.userId) && (
+                  <button onClick={() => setEditMode(true)}>
+                    수정
+                  </button>
+                )}
 
-              <button onClick={handleDelete}>
-                삭제
-              </button>
+                <button onClick={handleDelete}>
+                  삭제
+                </button>
 
-            </div>
-          )}
+              </div>
+            )}
 
           {/* 답글 버튼 */}
           {!item.parentId && (

@@ -20,7 +20,7 @@ import com.commission.user.dto.PasswordUpdateRequestDto;
 import com.commission.user.dto.RegisterRequestDto;
 import com.commission.user.dto.UserResponseDto;
 import com.commission.user.dto.UserUpdateRequestDto;
-import com.commission.user.entity.UserEntity;
+import com.commission.user.entity.User;
 import com.commission.user.repository.UserRepository;
 import com.commission.user.service.UserService;
 
@@ -61,7 +61,7 @@ public class UserController {
 	        HttpServletResponse response
 	) {
 
-	    UserEntity user = userService.login(
+	    User user = userService.login(
 	    		dto.getUsername(),
 	    		dto.getPassword()
 	    );
@@ -107,7 +107,7 @@ public class UserController {
 	    // userId 기반으로 변경
 	    Long userId = jwtUtil.getUserId(refreshToken);
 
-	    UserEntity user = userRepository.findById(userId)
+	    User user = userRepository.findById(userId)
 	            .orElseThrow(() -> new RuntimeException("유저 없음: " + userId));
 
 	    String newAccessToken = jwtUtil.createToken(

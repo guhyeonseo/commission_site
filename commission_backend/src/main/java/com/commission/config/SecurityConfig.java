@@ -85,6 +85,11 @@ public class SecurityConfig {
 	                	    "/images/**"
 	                	).permitAll()
 	                
+	                //임시 테스트용
+	                .requestMatchers(
+	                	    "/api/payments/**"
+	                	).permitAll()
+	                
 	                .requestMatchers("/uploads/**").permitAll()
 	                .anyRequest().authenticated()
 	            )

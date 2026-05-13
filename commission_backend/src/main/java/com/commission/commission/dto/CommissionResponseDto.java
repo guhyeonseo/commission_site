@@ -2,7 +2,7 @@ package com.commission.commission.dto;
 
 import java.util.List; 
 
-import com.commission.commission.entity.CommissionEntity;
+import com.commission.commission.entity.Commission;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class CommissionResponseDto {
     private String thumbnailUrl;
     private List<String> images;
 
-    public static CommissionResponseDto from(CommissionEntity c) {
+    public static CommissionResponseDto from(Commission c) {
         List<String> images = c.getImages()
                 .stream()
                 .map(img -> img.getImageUrl())

@@ -1,6 +1,6 @@
 package com.commission.user.dto;
 
-import com.commission.user.entity.UserEntity;
+import com.commission.user.entity.User;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,7 @@ public class UserResponseDto {
     private String profileImage;
     private String bio;
 
-    public static UserResponseDto from(UserEntity user) {
+    public static UserResponseDto from(User user) {
         return UserResponseDto.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())

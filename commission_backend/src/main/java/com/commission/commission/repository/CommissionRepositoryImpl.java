@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.commission.commission.dto.CommissionSearchDto;
-import com.commission.commission.entity.CommissionEntity;
+import com.commission.commission.entity.Commission;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -18,9 +18,9 @@ public class CommissionRepositoryImpl implements CommissionRepositoryCustom {
     private final EntityManager em;
 
     @Override
-    public List<CommissionEntity> search(CommissionSearchDto cond) {
+    public List<Commission> search(CommissionSearchDto cond) {
 
-        StringBuilder jpql = new StringBuilder("select c from CommissionEntity c where 1=1");
+        StringBuilder jpql = new StringBuilder("select c from Commission c where 1=1");
 
         if (cond.getKeyword() != null && !cond.getKeyword().isEmpty()) {
             jpql.append(" and c.title like :keyword");
@@ -47,7 +47,7 @@ public class CommissionRepositoryImpl implements CommissionRepositoryCustom {
             jpql.append(" order by c.createdAt desc");
         }
 
-        TypedQuery<CommissionEntity> query = em.createQuery(jpql.toString(), CommissionEntity.class);
+        TypedQuery<Commission> query = em.createQuery(jpql.toString(), Commission.class);
 
         if (cond.getKeyword() != null && !cond.getKeyword().isEmpty()) {
             query.setParameter("keyword", "%" + cond.getKeyword() + "%");

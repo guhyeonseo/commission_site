@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.commission.commission.dto.ReviewRequest;
-import com.commission.commission.entity.CommissionEntity;
-import com.commission.commission.entity.OrderEntity;
-import com.commission.commission.entity.ReviewEntity;
+import com.commission.commission.entity.Commission;
+import com.commission.commission.entity.Order;
+import com.commission.commission.entity.Review;
 import com.commission.commission.repository.CommissionRepository;
 import com.commission.commission.repository.OrderRepository;
 import com.commission.commission.repository.ReviewRepository;
@@ -30,7 +30,7 @@ public class ReviewService {
     public void createReview(ReviewRequest dto, Long userId) {
 
         // 1. 주문 조회
-        OrderEntity order = orderRepository.findById(dto.getOrderId())
+        Order order = orderRepository.findById(dto.getOrderId())
                 .orElseThrow(() -> new RuntimeException("주문 없음"));
 
         // 2. 본인 주문인지 체크 (null-safe)
@@ -55,7 +55,7 @@ public class ReviewService {
         }
 
         // 6. 리뷰 저장
-        ReviewEntity review = ReviewEntity.builder()
+        Review review = Review.builder()
                 .order(order)
                 .writerId(userId)
                 .rating(rating)
@@ -71,7 +71,7 @@ public class ReviewService {
     /**
      * 커미션 평균 평점 갱신
      */
-    private void updateCommissionRating(CommissionEntity commission) {
+    private void updateCommissionRating(Commission commission) {
 
         Double avg = reviewRepository.getAvgRating(commission.getId());
         int count = reviewRepository.countByOrder_Commission_Id(commission.getId());

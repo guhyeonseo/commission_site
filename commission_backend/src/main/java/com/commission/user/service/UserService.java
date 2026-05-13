@@ -9,7 +9,7 @@ import com.commission.user.dto.PasswordUpdateRequestDto;
 import com.commission.user.dto.RegisterRequestDto;
 import com.commission.user.dto.UserResponseDto;
 import com.commission.user.dto.UserUpdateRequestDto;
-import com.commission.user.entity.UserEntity;
+import com.commission.user.entity.User;
 import com.commission.user.entity.UserRole;
 import com.commission.user.repository.UserRepository;
 
@@ -38,7 +38,7 @@ public class UserService {
         	throw new IllegalArgumentException("이미 존재하는 이메일 입니다.");
         }
 
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUsername(dto.getUsername());
         user.setNickname(dto.getNickname());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -49,9 +49,9 @@ public class UserService {
     }
 
     // 로그인
-    public UserEntity login(String username, String password) {
+    public User login(String username, String password) {
 
-        UserEntity user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -64,7 +64,7 @@ public class UserService {
     @Transactional
     public void updateUser(Long userId, UserUpdateRequestDto dto, String imageUrl) {
 
-        UserEntity user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
         user.setNickname(dto.getNickname());
@@ -79,7 +79,7 @@ public class UserService {
     @Transactional
     public void updatePassword(Long userId, PasswordUpdateRequestDto dto) {
 
-        UserEntity user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
         if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
@@ -96,7 +96,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getMyInfo(Long userId) {
 
-        UserEntity user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow();
 
         return UserResponseDto.from(user);

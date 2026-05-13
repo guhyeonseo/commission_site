@@ -4,9 +4,9 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.commission.user.entity.UserEntity;
+import com.commission.user.entity.User;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long>{
+public interface UserRepository extends JpaRepository<User, Long>{
 
     // 아이디 중복 체크
     boolean existsByUsername(String username);
@@ -15,5 +15,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>{
     boolean existsByEmail(String email);
 
     // 로그인용 (아이디 찾기)
-    Optional<UserEntity> findByUsername(String username);
+    Optional<User> findByUsername(String username);
 }

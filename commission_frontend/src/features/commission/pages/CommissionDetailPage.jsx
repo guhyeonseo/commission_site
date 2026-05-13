@@ -88,6 +88,7 @@ export default function CommissionDetailPage() {
 
         <InquiryList
           commissionId={id}
+          commissionUserId={data.userId}
           refresh={refresh}
         />
       </div>

@@ -4,7 +4,8 @@ import InquiryItem from "./InquiryItem";
 
 export default function InquiryList({
   commissionId,
-  refresh
+  refresh,
+  commissionUserId
 }) {
 
   const [list, setList] = useState([]);
@@ -44,6 +45,7 @@ export default function InquiryList({
             item={parent}
             onRefresh={fetchData}
             commissionId={commissionId}
+            commissionUserId={commissionUserId}
           />
 
           {/* 해당 부모의 답글 */}
@@ -56,8 +58,9 @@ export default function InquiryList({
                 item={reply}
                 onRefresh={fetchData}
                 commissionId={commissionId}
+                commissionUserId={commissionUserId}
               />
-          ))}
+            ))}
 
         </div>
       ))}

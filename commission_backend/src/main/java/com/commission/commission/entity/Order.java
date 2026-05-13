@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "orders")
-public class OrderEntity {
+public class Order {
 
 	 @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class OrderEntity {
 	    // 커미션
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "commission_id", nullable = false)
-	    private CommissionEntity commission;
+	    private Commission commission;
 
 	    // 구매자
 	    @Column(name = "buyer_id", nullable = false)

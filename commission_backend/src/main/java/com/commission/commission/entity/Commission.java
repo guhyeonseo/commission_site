@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommissionEntity {
+public class Commission {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,7 +75,7 @@ public class CommissionEntity {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "commission", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommissionImageEntity> images = new ArrayList<>();
+    private List<CommissionImage> images = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

@@ -9,8 +9,8 @@ import com.commission.commission.dto.CommissionCreateDto;
 import com.commission.commission.dto.CommissionResponseDto;
 import com.commission.commission.dto.CommissionSearchDto;
 import com.commission.commission.dto.CommissionUpdateDto;
-import com.commission.commission.entity.CommissionEntity;
-import com.commission.commission.entity.CommissionImageEntity;
+import com.commission.commission.entity.Commission;
+import com.commission.commission.entity.CommissionImage;
 import com.commission.commission.repository.CommissionRepository;
 
 import jakarta.transaction.Transactional;
@@ -31,7 +31,7 @@ public class CommissionService {
 	            Integer thumbnailIndex
 	    ) {
 
-	        CommissionEntity c = new CommissionEntity();
+	        Commission c = new Commission();
 
 	        c.setUserId(userId);
 	        c.setTitle(dto.getTitle());
@@ -41,11 +41,11 @@ public class CommissionService {
 	        c.setCategory(dto.getCategory());
 	        c.setStatus("OPEN");
 
-	        List<CommissionImageEntity> imageList = new ArrayList<>();
+	        List<CommissionImage> imageList = new ArrayList<>();
 
 	        if (imageUrls != null && !imageUrls.isEmpty()) {
 	            for (String url : imageUrls) {
-	                CommissionImageEntity img = new CommissionImageEntity();
+	                CommissionImage img = new CommissionImage();
 	                img.setImageUrl(url);
 
 	                img.setCommission(c);
@@ -75,7 +75,7 @@ public class CommissionService {
 
 	    // 상세 + 조회수 증가
 	    public CommissionResponseDto findById(Long id) {
-	        CommissionEntity c = repository.findById(id)
+	        Commission c = repository.findById(id)
 	                .orElseThrow(() -> new RuntimeException("없음"));
 
 	        c.setViewCount(c.getViewCount() + 1);
@@ -85,7 +85,7 @@ public class CommissionService {
 
 	    // 수정 (이미지는 일단 제외)
 	    public CommissionResponseDto update(Long id, CommissionUpdateDto dto) {
-	        CommissionEntity c = repository.findById(id)
+	        Commission c = repository.findById(id)
 	                .orElseThrow(() -> new RuntimeException("없음"));
 
 	        c.setTitle(dto.getTitle());

@@ -14,63 +14,37 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "commission_inquiry")
+@Table(name = "commission_image")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InquiryEntity {
+public class CommissionImage {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 커미션 연결
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
+
+    // FK 주인
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commission_id", nullable = false)
-    private CommissionEntity commission;
+    private Commission commission;
 
-    // 작성자
-    @Column(name = "writer_id", nullable = false)
-    private Long writerId;
-
-    // 내용
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String content;
-
-    // 비밀글 여부
-    @Column(name = "is_secret")
-    private boolean isSecret;
-
-    // 부모 문의 (답글용)
-    @Column(name = "parent_id")
-    private Long parentId;
-
-    // 생성일
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // 자동 시간 설정
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
-    
-    // 수정
-    public void update(String content, boolean isSecret) {
-        this.content = content;
-        this.isSecret = isSecret;
-    }
-    
-    // 삭제
-    public void softDelete() {
-        this.content = "삭제된 문의입니다.";
-    }
-    
 }
