@@ -31,9 +31,23 @@ public class InquiryService {
     @Transactional
     public void createInquiry(InquiryRequest dto, Long userId) {
 
+    	System.out.println("dto = " + dto);
+        System.out.println("commissionId = " + dto.getCommissionId());
+    	
         CommissionEntity commission = commissionRepository.findById(dto.getCommissionId())
                 .orElseThrow(() -> new RuntimeException("글 없음"));
 
+        if (dto.getParentId() != null) {
+
+            InquiryEntity parent = inquiryRepository.findById(dto.getParentId())
+                    .orElseThrow(() -> new RuntimeException("부모 문의 없음"));
+
+            // 게시글 작성자만 답글 가능
+            if (!commission.getUserId().equals(userId)) {
+                throw new RuntimeException("답글 권한 없음");
+            }
+        }
+        
         InquiryEntity inquiry = InquiryEntity.builder()
                 .commission(commission)
                 .writerId(userId)

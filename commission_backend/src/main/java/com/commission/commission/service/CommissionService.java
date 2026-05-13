@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.commission.commission.dto.CommissionCreateDto;
 import com.commission.commission.dto.CommissionResponseDto;
+import com.commission.commission.dto.CommissionSearchDto;
 import com.commission.commission.dto.CommissionUpdateDto;
 import com.commission.commission.entity.CommissionEntity;
 import com.commission.commission.entity.CommissionImageEntity;
@@ -72,14 +73,6 @@ public class CommissionService {
 	        return CommissionResponseDto.from(repository.save(c));
 	    }
 
-	    // 목록
-	    public List<CommissionResponseDto> getList() {
-	        return repository.findAll()
-	                .stream()
-	                .map(CommissionResponseDto::from)
-	                .toList();
-	    }
-
 	    // 상세 + 조회수 증가
 	    public CommissionResponseDto findById(Long id) {
 	        CommissionEntity c = repository.findById(id)
@@ -107,5 +100,12 @@ public class CommissionService {
 	    // 삭제
 	    public void delete(Long id) {
 	        repository.deleteById(id);
+	    }
+	    
+	    public List<CommissionResponseDto> search(CommissionSearchDto cond) {
+	        return repository.search(cond)
+	                .stream()
+	                .map(CommissionResponseDto::from)
+	                .toList();
 	    }
 }

@@ -1,7 +1,7 @@
 import apiClient from "../../../services/apiClient";
 
-export const getCommissionList = () =>
-  apiClient.get("/commissions");
+export const getCommissionList = (params) =>
+  apiClient.get("/commissions", { params });
 
 export const getCommissionDetail = (id) =>
   apiClient.get(`/commissions/${id}`);

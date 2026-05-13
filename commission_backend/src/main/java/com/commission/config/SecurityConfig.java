@@ -77,6 +77,14 @@ public class SecurityConfig {
 	                        "/api/inquiries/**"
 	                    ).permitAll()
 	                
+	                .requestMatchers(
+	                	    "/favicon.ico",
+	                	    "/uploads/**",
+	                	    "/css/**",
+	                	    "/js/**",
+	                	    "/images/**"
+	                	).permitAll()
+	                
 	                .requestMatchers("/uploads/**").permitAll()
 	                .anyRequest().authenticated()
 	            )

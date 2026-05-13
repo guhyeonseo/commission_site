@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { createInquiry } from "../api/inquiryApi";
 
-export default function InquiryForm({ commissionId, onSuccess }) {
+export default function InquiryForm({
+  commissionId,
+  parentId = null,
+  onSuccess
+}) {
+
   const [content, setContent] = useState("");
   const [isSecret, setIsSecret] = useState(false);
 
@@ -10,15 +15,20 @@ export default function InquiryForm({ commissionId, onSuccess }) {
     if (!content.trim()) return;
 
     try {
+
       await createInquiry({
         commissionId,
         content,
         isSecret,
-        parentId: null
+        parentId
       });
 
       setContent("");
-      onSuccess();
+
+      if (onSuccess) {
+        onSuccess();
+      }
+
     } catch (e) {
       console.error(e);
       alert("작성 실패");
@@ -26,12 +36,15 @@ export default function InquiryForm({ commissionId, onSuccess }) {
   };
 
   return (
-    <div>
-      <h4>문의 작성</h4>
+    <div style={{
+      marginTop: "10px"
+    }}>
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        placeholder="문의 내용을 입력하세요"
       />
+
       <div>
         <label>
           <input
@@ -42,7 +55,10 @@ export default function InquiryForm({ commissionId, onSuccess }) {
           비밀글
         </label>
       </div>
-      <button onClick={handleSubmit}>등록</button>
+
+      <button onClick={handleSubmit}>
+        등록
+      </button>
     </div>
   );
 }

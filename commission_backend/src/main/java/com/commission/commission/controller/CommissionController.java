@@ -3,6 +3,7 @@ package com.commission.commission.controller;
 import java.util.ArrayList; 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.commission.commission.dto.CommissionCreateDto;
 import com.commission.commission.dto.CommissionResponseDto;
+import com.commission.commission.dto.CommissionSearchDto;
 import com.commission.commission.service.CommissionService;
 import com.commission.common.file.FileService;
 import com.commission.user.service.UserService;
@@ -72,13 +74,13 @@ public class CommissionController {
         return commissionService.findById(id);
     }
     
-    @GetMapping
-    public List<CommissionResponseDto> getList() {
-        return commissionService.getList();
-    }
-    
     @PostMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file) throws Exception {
     	return fileService.saveFile(file, "temp");
+    }
+    
+    @GetMapping
+    public ResponseEntity<?> getList(CommissionSearchDto cond) {
+        return ResponseEntity.ok(commissionService.search(cond));
     }
 }

@@ -1,52 +1,67 @@
 import { useEffect, useState } from "react";
-import { getInquiries } from "../../inquiry/api/inquiryApi";
+import { getInquiries } from "../api/inquiryApi";
 import InquiryItem from "./InquiryItem";
 
-export default function InquiryList({ commissionId, userId, refresh }) {
+export default function InquiryList({
+  commissionId,
+  refresh
+}) {
+
   const [list, setList] = useState([]);
+
+  const fetchData = async () => {
+
+    try {
+
+      const data = await getInquiries(commissionId);
+
+      setList(data);
+
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
     fetchData();
   }, [commissionId, refresh]);
 
-  const [loading, setLoading] = useState(false);
+  // 부모글
+  const parents = list.filter(i => !i.parentId);
 
-  const fetchData = async () => {
-
-    setLoading(true);
-    try {
-      const res = await getInquiries(commissionId);
-      console.log("@# res:", res);
-      console.log("@# typeof res:", typeof res);
-
-      setList(res || []);
-    } catch (e) {
-      console.error(e);
-      setList([]);
-    } finally {
-      setLoading(false);
-    }
-    console.log("userId:", userId);
-  };
+  // 답글
+  const replies = list.filter(i => i.parentId);
 
   return (
     <div>
-      <h3>문의</h3>
 
-      {loading ? (
-        <div>로딩중...</div>
-      ) : list.length === 0 ? (
-        <div>문의 없음</div>
-      ) : (
-        list.map((item) => (
+      {parents.map(parent => (
+
+        <div key={parent.id}>
+
+          {/* 부모글 */}
           <InquiryItem
-            key={item.id}
-            item={item}
-            userId={userId}
+            item={parent}
             onRefresh={fetchData}
+            commissionId={commissionId}
           />
-        ))
-      )}
+
+          {/* 해당 부모의 답글 */}
+          {replies
+            .filter(reply => reply.parentId === parent.id)
+            .map(reply => (
+
+              <InquiryItem
+                key={reply.id}
+                item={reply}
+                onRefresh={fetchData}
+                commissionId={commissionId}
+              />
+          ))}
+
+        </div>
+      ))}
+
     </div>
   );
 }
