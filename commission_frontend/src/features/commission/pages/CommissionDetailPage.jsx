@@ -5,6 +5,8 @@ import { getCommissionDetail } from "../api/commissionApi.js";
 import InquiryForm from "@/features/inquiry/components/InquiryForm";
 import InquiryList from "@/features/inquiry/components/InquiryList";
 
+import PaymentButton from "../../payment/components/PaymentButton";
+
 import "./CommissionDetailPage.css";
 
 export default function CommissionDetailPage() {
@@ -21,6 +23,9 @@ export default function CommissionDetailPage() {
   }, [id]);
 
   if (!data) return <div>로딩...</div>;
+
+  console.log(data.status);
+  console.log(typeof data.status);
 
   const fixedDescription = data.description
     ?.replace(/src="(?!http)(\/?uploads\/)/g, 'src="http://localhost:8484/$1')
@@ -92,6 +97,11 @@ export default function CommissionDetailPage() {
           refresh={refresh}
         />
       </div>
+
+      <PaymentButton
+        commissionId={data.id}
+      />
+
     </div>
 
   );

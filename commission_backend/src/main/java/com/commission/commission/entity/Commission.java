@@ -7,6 +7,8 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -53,8 +55,9 @@ public class Commission {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status = "OPEN";
+    private CommissionStatus status = CommissionStatus.OPEN;
 
     @Column(name = "view_count")
     private int viewCount = 0;

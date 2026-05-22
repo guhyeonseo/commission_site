@@ -59,6 +59,9 @@ public class Payment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commission_id")
     private Commission commission;
+    
+    @Column(name = "result_url")
+    private String resultUrl;
 
     @PrePersist
     public void prePersist() {

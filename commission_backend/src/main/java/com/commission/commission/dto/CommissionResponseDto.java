@@ -3,6 +3,7 @@ package com.commission.commission.dto;
 import java.util.List; 
 
 import com.commission.commission.entity.Commission;
+import com.commission.commission.entity.CommissionStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,8 @@ public class CommissionResponseDto {
     private String thumbnailUrl;
     private List<String> images;
 
+    private CommissionStatus status;
+    
     public static CommissionResponseDto from(Commission c) {
         List<String> images = c.getImages()
                 .stream()
@@ -34,7 +37,8 @@ public class CommissionResponseDto {
                 c.getPrice(),      
                 c.getEstimatedDays(),
                 c.getThumbnailUrl(),
-                images
+                images,
+                c.getStatus()
         );
     }
 }

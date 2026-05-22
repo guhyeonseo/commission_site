@@ -15,7 +15,13 @@ import CommissionListPage from "./features/commission/pages/CommissionListPage";
 import CommissionDetailPage from "./features/commission/pages/CommissionDetailPage";
 import CommissionCreatePage from "./features/commission/pages/CommissionCreatePage";
 
+import PaymentSuccessPage from "./features/payment/pages/PaymentSuccessPage";
+import PaymentFailPage from "./features/payment/pages/PaymentFailPage";
+
 import Mypage from "./features/user/pages/MyPage";
+
+import ArtistOrderPage from "./features/payment/pages/ArtistOrderPage";
+import BuyerOrderPage from "@/features/payment/pages/BuyerOrderPage";
 
 function AppInner() {
 
@@ -35,7 +41,7 @@ function AppInner() {
         localStorage.removeItem("token");
       });
 
-  }, []); 
+  }, []);
 
   return (
     <BrowserRouter>
@@ -46,10 +52,10 @@ function AppInner() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        <Route path="/commissionList" element= {<CommissionListPage />}/>
-        <Route path="/commission/:id" element= {<CommissionDetailPage />}/>
+        <Route path="/commissionList" element={<CommissionListPage />} />
+        <Route path="/commission/:id" element={<CommissionDetailPage />} />
 
-        <Route path="/mypage" element= {<Mypage />}/>
+        <Route path="/mypage" element={<Mypage />} />
 
         <Route
           path="/create"
@@ -68,6 +74,13 @@ function AppInner() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/payment/success" element={<PaymentSuccessPage />} />
+        <Route path="/payment/fail" element={<PaymentFailPage />} />
+
+        <Route path="/artist/orders" element={<ArtistOrderPage />} />
+        <Route path="/buyer/orders" element={<BuyerOrderPage />} />
+
       </Routes>
 
       <Footer />

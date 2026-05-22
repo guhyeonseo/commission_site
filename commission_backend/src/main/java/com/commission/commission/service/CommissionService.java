@@ -1,6 +1,6 @@
 package com.commission.commission.service;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +11,7 @@ import com.commission.commission.dto.CommissionSearchDto;
 import com.commission.commission.dto.CommissionUpdateDto;
 import com.commission.commission.entity.Commission;
 import com.commission.commission.entity.CommissionImage;
+import com.commission.commission.entity.CommissionStatus;
 import com.commission.commission.repository.CommissionRepository;
 
 import jakarta.transaction.Transactional;
@@ -39,7 +40,7 @@ public class CommissionService {
 	        c.setPrice(dto.getPrice());
 	        c.setEstimatedDays(dto.getEstimatedDays());
 	        c.setCategory(dto.getCategory());
-	        c.setStatus("OPEN");
+	        c.setStatus(CommissionStatus.OPEN);
 
 	        List<CommissionImage> imageList = new ArrayList<>();
 
@@ -108,4 +109,5 @@ public class CommissionService {
 	                .map(CommissionResponseDto::from)
 	                .toList();
 	    }
+	    
 }
