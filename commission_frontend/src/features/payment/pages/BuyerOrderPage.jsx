@@ -43,6 +43,54 @@ export default function BuyerOrderPage() {
     load();
   };
 
+  const getStatusText = (status) => {
+
+    switch (status) {
+
+      case "WAITING_START":
+        return "작업 대기";
+
+      case "IN_PROGRESS":
+        return "작업중";
+
+      case "WORK_DONE":
+        return "작업 완료";
+
+      case "COMPLETED":
+        return "거래 완료";
+
+      case "CANCELED":
+        return "주문 취소";
+
+      default:
+        return status;
+    }
+  };
+
+  const getStatusColor = (status) => {
+
+    switch (status) {
+
+      case "WAITING_START":
+        return "#f59e0b";
+
+      case "IN_PROGRESS":
+        return "#3b82f6";
+
+      case "WORK_DONE":
+        return "#8b5cf6";
+
+      case "COMPLETED":
+        return "#22c55e";
+
+      case "CANCELED":
+        return "#ef4444";
+
+      default:
+        return "#999";
+    }
+  };
+
   return (
     <div>
 
@@ -65,8 +113,28 @@ export default function BuyerOrderPage() {
           </div>
 
           <div>
+
             상태:
-            {item.status}
+
+            <span
+              style={{
+                background:
+                  getStatusColor(item.status),
+
+                color: "white",
+
+                padding: "4px 10px",
+
+                borderRadius: "999px",
+
+                marginLeft: "8px",
+
+                fontSize: "14px"
+              }}
+            >
+              {getStatusText(item.status)}
+            </span>
+
           </div>
 
           {item.status ===

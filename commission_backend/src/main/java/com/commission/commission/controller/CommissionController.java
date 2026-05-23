@@ -85,4 +85,17 @@ public class CommissionController {
         return ResponseEntity.ok(commissionService.search(cond));
     }
     
+    @GetMapping("/my")
+    public List<CommissionResponseDto>
+    getMyCommissions(
+            Authentication authentication
+    ) {
+
+        Long userId =
+                (Long) authentication.getPrincipal();
+
+        return commissionService
+                .getMyCommissions(userId);
+    }
+    
 }

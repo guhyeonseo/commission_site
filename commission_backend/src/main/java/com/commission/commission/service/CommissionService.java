@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.commission.commission.dto.CommissionCreateDto;
 import com.commission.commission.dto.CommissionResponseDto;
@@ -14,7 +15,6 @@ import com.commission.commission.entity.CommissionImage;
 import com.commission.commission.entity.CommissionStatus;
 import com.commission.commission.repository.CommissionRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -105,6 +105,17 @@ public class CommissionService {
 	    
 	    public List<CommissionResponseDto> search(CommissionSearchDto cond) {
 	        return repository.search(cond)
+	                .stream()
+	                .map(CommissionResponseDto::from)
+	                .toList();
+	    }
+	    
+	    @Transactional(readOnly = true)
+	    public List<CommissionResponseDto>
+	    getMyCommissions(Long userId) {
+
+	        return repository
+	                .findByUserId(userId)
 	                .stream()
 	                .map(CommissionResponseDto::from)
 	                .toList();

@@ -21,7 +21,8 @@ import PaymentFailPage from "./features/payment/pages/PaymentFailPage";
 import Mypage from "./features/user/pages/MyPage";
 
 import ArtistOrderPage from "./features/payment/pages/ArtistOrderPage";
-import BuyerOrderPage from "@/features/payment/pages/BuyerOrderPage";
+import BuyerOrderPage from "./features/payment/pages/BuyerOrderPage";
+import MyCommissionPage from "./features/commission/pages/MyCommissionPage";
 
 function AppInner() {
 
@@ -80,6 +81,8 @@ function AppInner() {
 
         <Route path="/artist/orders" element={<ArtistOrderPage />} />
         <Route path="/buyer/orders" element={<BuyerOrderPage />} />
+
+        <Route path="/my/commissions" element={<MyCommissionPage />} />
 
       </Routes>
 

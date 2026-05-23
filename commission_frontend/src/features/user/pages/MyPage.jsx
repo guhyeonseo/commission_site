@@ -44,6 +44,37 @@ export default function MyPage() {
           <button onClick={() => setMode("password")}>
             비밀번호 변경
           </button>
+
+          <hr />
+
+          <h3>주문 / 판매</h3>
+
+          <button
+            onClick={() =>
+              window.location.href =
+              "/buyer/orders"
+            }
+          >
+            내 주문
+          </button>
+
+          <button
+            onClick={() =>
+              window.location.href =
+              "/artist/orders"
+            }
+          >
+            판매 관리
+          </button>
+
+          <button
+            onClick={() =>
+              window.location.href =
+              "/my/commissions"
+            }
+          >
+            내 커미션
+          </button>
         </>
       )}
 
