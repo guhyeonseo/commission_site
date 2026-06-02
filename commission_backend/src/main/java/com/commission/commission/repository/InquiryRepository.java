@@ -20,4 +20,9 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     // 특정 댓글에 자식 댓글이 존재하는지 확인 
     // 삭제 시 soft delete 여부 판단
     boolean existsByParentId(Long parentId);
+    
+    // 특정 커미션 문의 전체 삭제
+    void deleteByCommission_Id(
+            Long commissionId
+    );
 }

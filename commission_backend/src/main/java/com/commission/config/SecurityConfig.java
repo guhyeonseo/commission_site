@@ -2,6 +2,7 @@ package com.commission.config;
 
 import org.springframework.context.annotation.Bean; 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -71,11 +72,12 @@ public class SecurityConfig {
 	                    "/api/user/refresh"
 	                ).permitAll()
 	                
-	                .requestMatchers(
-	                        "/api/commissions",
-	                        "/api/commissions/**",
-	                        "/api/inquiries/**"
-	                    ).permitAll()
+//	                .requestMatchers(
+//	                		HttpMethod.DELETE,
+//	                        "/api/commissions",
+//	                        "/api/commissions/**",
+//	                        "/api/inquiries/**"
+//	                    ).permitAll()
 	                
 	                .requestMatchers(
 	                	    "/favicon.ico",
@@ -83,6 +85,12 @@ public class SecurityConfig {
 	                	    "/css/**",
 	                	    "/js/**",
 	                	    "/images/**"
+	                	).permitAll()
+	                
+	                .requestMatchers(
+	                	    HttpMethod.GET,
+	                	    "/api/commissions",
+	                	    "/api/commissions/**"
 	                	).permitAll()
 	                
 	                //임시 테스트용

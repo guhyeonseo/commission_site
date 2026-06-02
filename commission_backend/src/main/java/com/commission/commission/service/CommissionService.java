@@ -14,6 +14,10 @@ import com.commission.commission.entity.Commission;
 import com.commission.commission.entity.CommissionImage;
 import com.commission.commission.entity.CommissionStatus;
 import com.commission.commission.repository.CommissionRepository;
+import com.commission.commission.repository.InquiryRepository;
+import com.commission.common.file.FileService;
+import com.commission.payment.entity.PaymentStatus;
+import com.commission.payment.repository.PaymentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +26,10 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class CommissionService {
 
-	 private final CommissionRepository repository;
+	 private final CommissionRepository commissionRepository;
+	 private final PaymentRepository paymentRepository;
+	 private final InquiryRepository inquiryRepository;
+	 private final FileService fileService;
 
 	    // 생성 
 	    public CommissionResponseDto create(
@@ -71,13 +78,21 @@ public class CommissionService {
 	            c.setThumbnailUrl(imageList.get(index).getImageUrl());
 	        }
 
-	        return CommissionResponseDto.from(repository.save(c));
+	        return CommissionResponseDto.from(commissionRepository.save(c));
 	    }
 
 	    // 상세 + 조회수 증가
 	    public CommissionResponseDto findById(Long id) {
-	        Commission c = repository.findById(id)
+	        Commission c = commissionRepository.findById(id)
 	                .orElseThrow(() -> new RuntimeException("없음"));
+	        
+	        if (c.getStatus()
+	                == CommissionStatus.DELETED) {
+
+	            throw new RuntimeException(
+	                    "삭제된 커미션"
+	            );
+	        }
 
 	        c.setViewCount(c.getViewCount() + 1);
 
@@ -86,7 +101,7 @@ public class CommissionService {
 
 	    // 수정 (이미지는 일단 제외)
 	    public CommissionResponseDto update(Long id, CommissionUpdateDto dto) {
-	        Commission c = repository.findById(id)
+	        Commission c = commissionRepository.findById(id)
 	                .orElseThrow(() -> new RuntimeException("없음"));
 
 	        c.setTitle(dto.getTitle());
@@ -99,12 +114,88 @@ public class CommissionService {
 	    }
 
 	    // 삭제
-	    public void delete(Long id) {
-	        repository.deleteById(id);
+	    @Transactional
+	    public void deleteCommission(
+	            Long commissionId,
+	            Long userId
+	    ) {
+
+	        Commission commission =
+	                commissionRepository
+	                .findById(commissionId)
+	                .orElseThrow();
+
+	        // 권한 체크
+	        if (!commission.getUserId()
+	                .equals(userId)) {
+
+	            throw new RuntimeException(
+	                    "권한 없음"
+	            );
+	        }
+
+	        // 진행중 거래 확인
+	        boolean hasActivePayment =
+	                paymentRepository
+	                .existsByCommission_IdAndStatusIn(
+	                        commissionId,
+
+	                        List.of(
+	                        		PaymentStatus.READY,
+	                                PaymentStatus.IN_PROGRESS
+	                        )
+	                );
+
+	        if (hasActivePayment) {
+
+	            throw new RuntimeException(
+	                    "진행중인 주문이 있습니다."
+	            );
+	        }
+
+	        // 거래 기록 존재 여부
+	        boolean hasPayment =
+	                paymentRepository
+	                .existsByCommission_Id(
+	                        commissionId
+	                );
+
+	        // 거래 기록 있으면 상태만 변경
+	        if (hasPayment) {
+
+	            commission.setStatus(
+	                    CommissionStatus.DELETED
+	            );
+
+	            return;
+	        }
+
+	        // 문의 삭제
+	        inquiryRepository
+	                .deleteByCommission_Id(
+	                        commissionId
+	                );
+
+	        // 파일 삭제
+	        fileService.deleteFile(
+	                commission.getThumbnailUrl()
+	        );
+
+	        // 실제 삭제
+	        commissionRepository.delete(
+	                commission
+	        );
 	    }
 	    
-	    public List<CommissionResponseDto> search(CommissionSearchDto cond) {
-	        return repository.search(cond)
+	    @Transactional(readOnly = true)
+	    public List<CommissionResponseDto>
+	    getMyCommissions(Long userId) {
+
+	        return commissionRepository
+	                .findByUserIdAndStatusNot(
+	                        userId,
+	                        CommissionStatus.DELETED
+	                )
 	                .stream()
 	                .map(CommissionResponseDto::from)
 	                .toList();
@@ -112,13 +203,38 @@ public class CommissionService {
 	    
 	    @Transactional(readOnly = true)
 	    public List<CommissionResponseDto>
-	    getMyCommissions(Long userId) {
+	    search(CommissionSearchDto cond) {
 
-	        return repository
-	                .findByUserId(userId)
+	        return commissionRepository
+	                .search(cond)
 	                .stream()
 	                .map(CommissionResponseDto::from)
 	                .toList();
+	    }
+	    
+	    public void toggleStatus(
+	            Long commissionId,
+	            Long userId
+	    ) {
+
+	        Commission commission =
+	                commissionRepository
+	                .findById(commissionId)
+	                .orElseThrow();
+
+	        if (!commission.getUserId().equals(userId)) {
+	            throw new RuntimeException("권한 없음");
+	        }
+
+	        if (commission.getStatus() == CommissionStatus.OPEN) {
+	            commission.setStatus(
+	                    CommissionStatus.CLOSED
+	            );
+	        } else if (commission.getStatus() == CommissionStatus.CLOSED) {
+	            commission.setStatus(
+	                    CommissionStatus.OPEN
+	            );
+	        }
 	    }
 	    
 }

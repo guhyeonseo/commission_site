@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.commission.commission.dto.CommissionSearchDto;
 import com.commission.commission.entity.Commission;
+import com.commission.commission.entity.CommissionStatus;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -20,7 +21,7 @@ public class CommissionRepositoryImpl implements CommissionRepositoryCustom {
     @Override
     public List<Commission> search(CommissionSearchDto cond) {
 
-        StringBuilder jpql = new StringBuilder("select c from Commission c where 1=1");
+        StringBuilder jpql = new StringBuilder("select c from Commission c where c.status != :deleted");
 
         if (cond.getKeyword() != null && !cond.getKeyword().isEmpty()) {
             jpql.append(" and c.title like :keyword");
@@ -47,7 +48,16 @@ public class CommissionRepositoryImpl implements CommissionRepositoryCustom {
             jpql.append(" order by c.createdAt desc");
         }
 
-        TypedQuery<Commission> query = em.createQuery(jpql.toString(), Commission.class);
+        TypedQuery<Commission> query =
+                em.createQuery(
+                        jpql.toString(),
+                        Commission.class
+                );
+        
+        query.setParameter(
+                "deleted",
+                CommissionStatus.DELETED
+        );
 
         if (cond.getKeyword() != null && !cond.getKeyword().isEmpty()) {
             query.setParameter("keyword", "%" + cond.getKeyword() + "%");
@@ -64,7 +74,8 @@ public class CommissionRepositoryImpl implements CommissionRepositoryCustom {
         if (cond.getCategory() != null && !cond.getCategory().isEmpty()) {
             query.setParameter("category", cond.getCategory());
         }
-
+        
+      
         return query.getResultList();
     }
 }

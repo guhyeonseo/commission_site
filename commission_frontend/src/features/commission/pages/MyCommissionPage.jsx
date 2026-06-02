@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMyCommissions } from "../api/commissionApi";
+import { getMyCommissions, toggleCommissionStatus, deleteCommission } from "../api/commissionApi";
 
 export default function
     MyCommissionPage() {
@@ -49,6 +49,49 @@ export default function
                     <div>
                         상태:
                         {item.status}
+                        <button
+                            onClick={async () => {
+
+                                await toggleCommissionStatus(
+                                    item.id
+                                );
+
+                                load();
+                            }}
+                        >
+                            {item.status === "OPEN"
+                                ? "모집 마감"
+                                : "모집 열기"}
+                        </button>
+
+                        <button
+                            onClick={async () => {
+
+                                const ok = window.confirm(
+                                    "커미션을 삭제하시겠습니까?"
+                                );
+
+                                if (!ok) {
+                                    return;
+                                }
+
+                                try {
+                                    await deleteCommission(item.id);
+
+                                    load();
+                                } catch (e) {
+                                    alert(
+                                        e.response?.data ||
+                                        "모집 중인 커미션이 있습니다."
+                                    );
+                                }
+
+                                load();
+                            }}
+                        >
+                            삭제
+                        </button>
+
                     </div>
 
                 </div>

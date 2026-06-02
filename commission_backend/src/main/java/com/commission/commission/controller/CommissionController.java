@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,6 +97,35 @@ public class CommissionController {
 
         return commissionService
                 .getMyCommissions(userId);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteCommission(
+            @PathVariable("id") Long id,
+            Authentication authentication
+    ) {
+
+        Long userId =
+                (Long) authentication
+                        .getPrincipal();
+
+        commissionService.deleteCommission(
+                id,
+                userId
+        );
+    }
+    
+    @PatchMapping("/{id}/toggle")
+    public void toggle(
+            @PathVariable("id") Long id,
+            Authentication auth
+    ) {
+        Long userId = (Long) auth.getPrincipal();
+
+        commissionService.toggleStatus(
+                id,
+                userId
+        );
     }
     
 }

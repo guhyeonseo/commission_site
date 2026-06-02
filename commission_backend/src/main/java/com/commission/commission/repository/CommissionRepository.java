@@ -5,9 +5,15 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.commission.commission.entity.Commission;
+import com.commission.commission.entity.CommissionStatus;
 
 public interface CommissionRepository extends JpaRepository<Commission, Long>, CommissionRepositoryCustom{
 
 	List<Commission> findByUserId(Long userId);
+	
+	List<Commission> findByUserIdAndStatusNot(
+	        Long userId,
+	        CommissionStatus status
+	);
 }
 	

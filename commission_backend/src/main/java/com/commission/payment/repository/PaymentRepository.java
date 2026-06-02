@@ -21,4 +21,13 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>{
 	        Long commissionId,
 	        List<PaymentStatus> statuses
 	);
+	
+	boolean existsByCommission_Id(
+	        Long commissionId
+	);
+
+	boolean existsByCommission_IdAndStatusIn(
+	        Long commissionId,
+	        List<PaymentStatus> statuses
+	);
 }

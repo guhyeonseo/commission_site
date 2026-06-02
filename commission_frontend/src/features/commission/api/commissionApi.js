@@ -26,3 +26,32 @@ export const getMyCommissions =
 
     return response.data;
   };
+
+export const toggleCommissionStatus =
+  async (commissionId) => {
+
+    await axios.patch(
+      `http://localhost:8484/api/commissions/${commissionId}/toggle`,
+      {},
+      {
+        headers: {
+          Authorization:
+            `Bearer ${localStorage.getItem("accessToken")}`
+        }
+      }
+    );
+  };
+
+export const deleteCommission =
+  async (commissionId) => {
+
+    await axios.delete(
+      `http://localhost:8484/api/commissions/${commissionId}`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${localStorage.getItem("accessToken")}`
+        }
+      }
+    );
+  };
