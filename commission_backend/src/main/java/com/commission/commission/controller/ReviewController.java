@@ -44,4 +44,14 @@ public class ReviewController {
 	    return reviewService.getReviews(commissionId);
 	}
 	
+	@GetMapping("/my")
+    public List<ReviewResponse> getMyReviews(
+            Authentication authentication
+    ) {
+        Long userId =
+                Long.valueOf(authentication.getName());
+
+        return reviewService.getMyReviews(userId);
+    }
+	
 }

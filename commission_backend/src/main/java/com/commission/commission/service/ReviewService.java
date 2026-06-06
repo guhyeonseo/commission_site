@@ -151,4 +151,47 @@ public class ReviewService {
                 })
                 .toList();
     }
+    
+    @Transactional(readOnly = true)
+    public List<ReviewResponse> getMyReviews(
+            Long userId
+    ) {
+
+        return reviewRepository
+                .findByWriterIdOrderByIdDesc(userId)
+                .stream()
+                .map(review -> {
+
+                    ReviewResponse response =
+                            ReviewResponse.builder()
+                                    .id(review.getId())
+                                    .writerId(review.getWriterId())
+                                    .writerNickname(
+                                            userRepository.findById(
+                                                    review.getWriterId()
+                                            )
+                                            .orElseThrow()
+                                            .getNickname()
+                                    )
+                                    .commissionTitle(
+                                            review.getPayment()
+                                                  .getCommission()
+                                                  .getTitle()
+                                    )
+                                    .rating(review.getRating())
+                                    .content(review.getContent())
+                                    .createdAt(
+                                            review.getCreatedAt()
+                                                  .format(
+                                                          DateTimeFormatter.ofPattern(
+                                                                  "yyyy.MM.dd HH:mm"
+                                                          )
+                                                  )
+                                    )
+                                    .build();
+
+                    return response;
+                })
+                .toList();
+    }
 }

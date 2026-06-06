@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getMyInfo } from "@/features/user/api/userApi";
 import UserEditForm from "../components/UserEditForm";
 import PasswordChangeForm from "../components/PasswordChangeForm";
+import { Link } from "react-router-dom";
 
 export default function MyPage() {
   const [user, setUser] = useState(null);
@@ -75,6 +76,11 @@ export default function MyPage() {
           >
             내 커미션
           </button>
+
+          <Link to="/my-reviews">
+            내가 쓴 리뷰
+          </Link>
+
         </>
       )}
 

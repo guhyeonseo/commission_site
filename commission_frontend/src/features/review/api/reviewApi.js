@@ -5,3 +5,6 @@ export const getReviews = (commissionId) =>
 
 export const createReview = (data) =>
   apiClient.post("/reviews", data);
+
+export const getMyReviews = () =>
+  apiClient.get("/reviews/my");

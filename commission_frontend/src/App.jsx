@@ -24,6 +24,8 @@ import ArtistOrderPage from "./features/payment/pages/ArtistOrderPage";
 import BuyerOrderPage from "./features/payment/pages/BuyerOrderPage";
 import MyCommissionPage from "./features/commission/pages/MyCommissionPage";
 
+import MyReviewsPage from "./features/review/pages/MyReviewsPage";
+
 function AppInner() {
 
   useEffect(() => {
@@ -83,6 +85,8 @@ function AppInner() {
         <Route path="/buyer/orders" element={<BuyerOrderPage />} />
 
         <Route path="/my/commissions" element={<MyCommissionPage />} />
+
+        <Route path="/my-reviews" element={<MyReviewsPage />} />
 
       </Routes>
 

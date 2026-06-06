@@ -13,6 +13,7 @@ public class ReviewResponse {
     private Long paymentId;
     private Long writerId;
     private String writerNickname;
+    private String commissionTitle;
     
     private Double rating;
     private String content;
