@@ -17,4 +17,6 @@ public class InquiryResponse {
     private boolean canView;
     private Long parentId;
     private String createdAt;
+    private Double avgRating;
+    private Integer reviewCount;
 }

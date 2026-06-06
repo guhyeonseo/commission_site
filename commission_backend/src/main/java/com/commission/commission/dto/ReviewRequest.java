@@ -7,7 +7,10 @@ import lombok.Setter;
 @Setter
 public class ReviewRequest {
 
-    private Long orderId;
+	private Long paymentId;
+
     private Double rating;
+
     private String content;
+    
 }

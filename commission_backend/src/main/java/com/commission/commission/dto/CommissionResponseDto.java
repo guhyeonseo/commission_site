@@ -24,6 +24,9 @@ public class CommissionResponseDto {
 
     private CommissionStatus status;
     
+	private Double avgRating;
+	private Integer reviewCount;
+    
     public static CommissionResponseDto from(Commission c) {
         List<String> images = c.getImages()
                 .stream()
@@ -34,11 +37,13 @@ public class CommissionResponseDto {
                 c.getId(),
                 c.getTitle(),
                 c.getDescription(),
-                c.getPrice(),      
+                c.getPrice(),
                 c.getEstimatedDays(),
                 c.getThumbnailUrl(),
                 images,
-                c.getStatus()
+                c.getStatus(),
+                c.getAvgRating(),
+                c.getReviewCount()
         );
     }
 }

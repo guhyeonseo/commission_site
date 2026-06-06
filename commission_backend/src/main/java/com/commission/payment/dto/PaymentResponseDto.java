@@ -23,9 +23,12 @@ public class PaymentResponseDto {
     private PaymentStatus status;
     
     private String resultUrl;
+    
+    private boolean reviewed;
 
     public static PaymentResponseDto from(
-            Payment payment
+            Payment payment,
+            boolean reviewed
     ) {
 
         return new PaymentResponseDto(
@@ -44,7 +47,9 @@ public class PaymentResponseDto {
 
                 payment.getStatus(),
                 
-                payment.getResultUrl()
+                payment.getResultUrl(),
+                
+                reviewed
         );
     }
 	

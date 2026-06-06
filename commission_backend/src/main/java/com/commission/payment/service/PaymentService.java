@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.commission.commission.entity.Commission;
 import com.commission.commission.repository.CommissionRepository;
+import com.commission.commission.repository.ReviewRepository;
 import com.commission.common.file.FileService;
 import com.commission.payment.dto.PaymentConfirmRequest;
 import com.commission.payment.dto.PaymentCreateRequest;
@@ -38,6 +39,7 @@ public class PaymentService {
 	private final CommissionRepository commissionRepository;
 	private final UserRepository userRepository;
 	private final FileService fileService;
+	private final ReviewRepository reviewRepository;
 
     @Transactional
     public PaymentCreateResponse create(
@@ -254,17 +256,42 @@ public class PaymentService {
         return paymentRepository
                 .findByCommission_UserId(userId)
                 .stream()
-                .map(PaymentResponseDto::from)
+                .map(payment -> {
+
+                    boolean reviewed =
+                            reviewRepository
+                            .existsByPayment_Id(
+                                    payment.getId()
+                            );
+
+                    return PaymentResponseDto.from(
+                            payment,
+                            reviewed
+                    );
+                })
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<PaymentResponseDto>
     getBuyerOrders(Long buyerId) {
 
         return paymentRepository
                 .findByBuyer_Id(buyerId)
                 .stream()
-                .map(PaymentResponseDto::from)
+                .map(payment -> {
+
+                    boolean reviewed =
+                            reviewRepository
+                            .existsByPayment_Id(
+                                    payment.getId()
+                            );
+
+                    return PaymentResponseDto.from(
+                            payment,
+                            reviewed
+                    );
+                })
                 .toList();
     }
     

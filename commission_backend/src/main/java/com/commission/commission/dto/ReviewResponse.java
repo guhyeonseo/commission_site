@@ -10,8 +10,10 @@ import lombok.Setter;
 public class ReviewResponse {
 	
     private Long id;
-    private Long orderId;
+    private Long paymentId;
     private Long writerId;
+    private String writerNickname;
+    
     private Double rating;
     private String content;
     private String createdAt;

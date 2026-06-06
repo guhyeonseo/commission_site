@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 
-
 import {
   getBuyerOrders,
   completePayment,
   cancelPayment
 } from "../api/paymentApi";
 
+import { createReview } from "@/features/review/api/reviewApi";
+
 export default function BuyerOrderPage() {
+
+  const [reviewData, setReviewData] = useState({});
 
   const [list, setList] =
     useState([]);
@@ -17,8 +20,16 @@ export default function BuyerOrderPage() {
     const res =
       await getBuyerOrders();
 
+    console.log(
+      JSON.stringify(
+        res.data,
+        null,
+        2
+      )
+    );
     setList(res.data);
   };
+
 
   useEffect(() => {
     load();
@@ -88,6 +99,50 @@ export default function BuyerOrderPage() {
 
       default:
         return "#999";
+    }
+  };
+
+  const handleReviewChange = (
+    paymentId,
+    field,
+    value
+  ) => {
+
+    setReviewData(prev => ({
+      ...prev,
+      [paymentId]: {
+        ...prev[paymentId],
+        [field]: value
+      }
+    }));
+  };
+
+  const handleReview = async (
+    paymentId
+  ) => {
+
+    const review =
+      reviewData[paymentId];
+
+    try {
+
+      await createReview({
+        paymentId,
+        rating:
+          Number(review?.rating ?? 5),
+        content:
+          review?.content ?? ""
+      });
+
+      alert("리뷰 작성 완료");
+
+      load();
+
+    } catch (e) {
+
+      console.log(e);
+
+      alert("리뷰 작성 실패");
     }
   };
 
@@ -165,6 +220,75 @@ export default function BuyerOrderPage() {
                   구매 확정
                 </button>
 
+              </div>
+            )}
+
+          {item.status === "COMPLETED" &&
+            !item.reviewed && (
+
+              <div
+                style={{
+                  marginTop: "10px"
+                }}
+              >
+
+                <input
+                  type="number"
+                  min="0"
+                  max="5"
+                  step="0.5"
+                  placeholder="별점"
+
+                  value={
+                    reviewData[item.id]
+                      ?.rating ?? 5
+                  }
+
+                  onChange={(e) =>
+                    handleReviewChange(
+                      item.id,
+                      "rating",
+                      e.target.value
+                    )
+                  }
+                />
+
+                <br />
+
+                <textarea
+                  placeholder="리뷰 내용"
+
+                  value={
+                    reviewData[item.id]
+                      ?.content ?? ""
+                  }
+
+                  onChange={(e) =>
+                    handleReviewChange(
+                      item.id,
+                      "content",
+                      e.target.value
+                    )
+                  }
+                />
+
+                <br />
+
+                <button
+                  onClick={() =>
+                    handleReview(item.id)
+                  }
+                >
+                  리뷰 작성
+                </button>
+
+              </div>
+            )}
+
+          {item.status === "COMPLETED" &&
+            item.reviewed && (
+              <div>
+                ✅ 리뷰 작성 완료
               </div>
             )}
         </div>

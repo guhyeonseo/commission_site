@@ -75,19 +75,79 @@ export default function CommissionListPage() {
       </div>
 
       {/* 📦 리스트 */}
-      <div style={{ marginTop: "20px" }}>
+      <div
+        style={{
+          marginTop: "20px",
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fill, minmax(280px, 1fr))",
+          gap: "20px"
+        }}
+      >
         {list.map((c) => (
-          <div key={c.id} style={{ marginBottom: "20px" }}>
-            <Link to={`/commission/${c.id}`}>
+          <Link
+            key={c.id}
+            to={`/commission/${c.id}`}
+            style={{
+              textDecoration: "none",
+              color: "inherit"
+            }}
+          >
+            <div
+              style={{
+                border: "1px solid #ddd",
+                borderRadius: "12px",
+                overflow: "hidden",
+                background: "#fff",
+                boxShadow:
+                  "0 2px 8px rgba(0,0,0,0.1)",
+                transition: "0.2s"
+              }}
+            >
               <img
                 src={`http://localhost:8484${c.thumbnailUrl}`}
-                width={200}
-                onError={(e) => (e.target.src = "/default.png")}
+                onError={(e) =>
+                  (e.target.src = "/default.png")
+                }
+                alt=""
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "cover"
+                }}
               />
-              <p>{c.title}</p>
-              <p>{c.price}원</p>
-            </Link>
-          </div>
+
+              <div
+                style={{
+                  padding: "15px"
+                }}
+              >
+                <h3
+                  style={{
+                    margin: 0,
+                    marginBottom: "10px"
+                  }}
+                >
+                  {c.title}
+                </h3>
+
+                <div>
+                  ⭐ {c.avgRating?.toFixed(1) ?? 0}
+                  ({c.reviewCount ?? 0})
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "10px",
+                    fontWeight: "bold",
+                    fontSize: "18px"
+                  }}
+                >
+                  {c.price?.toLocaleString()}원
+                </div>
+              </div>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
