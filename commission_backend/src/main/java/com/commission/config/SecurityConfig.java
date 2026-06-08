@@ -103,6 +103,16 @@ public class SecurityConfig {
 	                	    "/api/inquiries/**"
 	                	).permitAll()
 	                
+	                .requestMatchers(
+	                	    HttpMethod.GET,
+	                	    "/api/user/*"
+	                	).permitAll()
+	                
+	                .requestMatchers(
+	                	    HttpMethod.GET,
+	                	    "/api/user/*/commissions"
+	                	).permitAll()
+	                
 	                //임시 테스트용
 	                .requestMatchers(
 	                	    "/api/payments/**"

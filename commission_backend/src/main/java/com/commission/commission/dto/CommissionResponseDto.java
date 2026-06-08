@@ -14,6 +14,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommissionResponseDto {
 
+	private Long userId;
+	private String nickname;
+	
 	private Long id;
     private String title;
     private String description; 
@@ -34,6 +37,9 @@ public class CommissionResponseDto {
                 .toList();
 
         return new CommissionResponseDto(
+        		c.getUserId(),
+        		null,
+
                 c.getId(),
                 c.getTitle(),
                 c.getDescription(),

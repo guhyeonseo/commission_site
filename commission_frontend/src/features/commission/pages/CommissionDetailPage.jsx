@@ -9,9 +9,14 @@ import PaymentButton from "../../payment/components/PaymentButton";
 
 import { getReviews } from "@/features/review/api/reviewApi";
 
+import { useNavigate } from "react-router-dom";
+
 import "./CommissionDetailPage.css";
 
 export default function CommissionDetailPage() {
+
+  const navigate = useNavigate();
+
   const [refresh, setRefresh] = useState(false);
 
   const { id } = useParams();
@@ -22,6 +27,7 @@ export default function CommissionDetailPage() {
 
   useEffect(() => {
     getCommissionDetail(id).then((res) => {
+      console.log("응답 데이터", res.data);
       setData(res.data);
     });
   }, [id]);
@@ -97,6 +103,10 @@ export default function CommissionDetailPage() {
 
         <div>💰 가격: {data.price?.toLocaleString()}원 ~</div>
         <div>⏱ 작업일: {data.estimatedDays}일</div>
+
+        <button onClick={() => navigate(`/users/${data.userId}`)}>
+          {data.nickname}
+        </button>
 
         <PaymentButton
           commissionId={data.id}

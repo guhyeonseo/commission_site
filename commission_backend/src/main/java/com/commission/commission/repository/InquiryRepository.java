@@ -25,4 +25,6 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     void deleteByCommission_Id(
             Long commissionId
     );
+    
+    List<Inquiry> findByUserIdOrderByCreatedAtDesc(Long userId);
 }

@@ -1,11 +1,13 @@
 package com.commission.user.controller;
  
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping; 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.commission.commission.dto.CommissionResponseDto;
+import com.commission.commission.service.CommissionService;
 import com.commission.common.file.FileService;
 import com.commission.config.JwtUtil;
 import com.commission.user.dto.LoginRequestDto;
 import com.commission.user.dto.PasswordUpdateRequestDto;
 import com.commission.user.dto.RegisterRequestDto;
+import com.commission.user.dto.SellerProfileResponseDto;
 import com.commission.user.dto.UserResponseDto;
 import com.commission.user.dto.UserUpdateRequestDto;
 import com.commission.user.entity.User;
@@ -44,6 +49,8 @@ public class UserController {
 	private final JwtUtil jwtUtil;
 	
 	private final UserRepository userRepository;
+	
+	private final CommissionService commissionService;
 	
 	@PostMapping("/register")
 	 public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDto dto) {
@@ -179,4 +186,20 @@ public class UserController {
         return ResponseEntity.ok("비밀번호 변경 완료");
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SellerProfileResponseDto>
+    getSellerProfile(
+            @PathVariable("id") Long id
+    ) {
+        return ResponseEntity.ok(
+                userService.getSellerProfile(id)
+        );
+    }
+    
+    @GetMapping("/{id}/commissions")
+    public List<CommissionResponseDto> getSellerCommissions(
+            @PathVariable("id") Long id
+    ) {
+        return commissionService.getSellerCommissions(id);
+    }
 }

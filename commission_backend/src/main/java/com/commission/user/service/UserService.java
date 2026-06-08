@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.commission.common.file.FileService;
 import com.commission.user.dto.PasswordUpdateRequestDto;
 import com.commission.user.dto.RegisterRequestDto;
+import com.commission.user.dto.SellerProfileResponseDto;
 import com.commission.user.dto.UserResponseDto;
 import com.commission.user.dto.UserUpdateRequestDto;
 import com.commission.user.entity.User;
@@ -107,5 +108,20 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow()
                 .getId();
+    }
+    
+    @Transactional(readOnly = true)
+    public SellerProfileResponseDto getSellerProfile(
+            Long userId
+    ) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("유저 없음"));
+
+        return SellerProfileResponseDto.builder()
+        		.userId(user.getId())
+                .nickname(user.getNickname())
+                .introduction(user.getBio())
+                .build();
     }
 }

@@ -18,6 +18,7 @@ import com.commission.commission.repository.InquiryRepository;
 import com.commission.common.file.FileService;
 import com.commission.payment.entity.PaymentStatus;
 import com.commission.payment.repository.PaymentRepository;
+import com.commission.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +31,7 @@ public class CommissionService {
 	 private final PaymentRepository paymentRepository;
 	 private final InquiryRepository inquiryRepository;
 	 private final FileService fileService;
+	 private final UserRepository userRepository;
 
 	    // 생성 
 	    public CommissionResponseDto create(
@@ -96,7 +98,31 @@ public class CommissionService {
 
 	        c.setViewCount(c.getViewCount() + 1);
 
-	        return CommissionResponseDto.from(c);
+	        String nickname = userRepository
+	                .findById(c.getUserId())
+	                .orElseThrow(() -> new RuntimeException("사용자 없음"))
+	                .getNickname();
+
+	        List<String> images = c.getImages()
+	                .stream()
+	                .map(img -> img.getImageUrl())
+	                .toList();
+
+	        return new CommissionResponseDto(
+	                c.getUserId(),
+	                nickname,
+
+	                c.getId(),
+	                c.getTitle(),
+	                c.getDescription(),
+	                c.getPrice(),
+	                c.getEstimatedDays(),
+	                c.getThumbnailUrl(),
+	                images,
+	                c.getStatus(),
+	                c.getAvgRating(),
+	                c.getReviewCount()
+	        );
 	    }
 
 	    // 수정 (이미지는 일단 제외)
@@ -237,4 +263,16 @@ public class CommissionService {
 	        }
 	    }
 	    
+	    @Transactional(readOnly = true)
+	    public List<CommissionResponseDto> getSellerCommissions(Long userId) {
+
+	        return commissionRepository
+	                .findByUserIdAndStatusNot(
+	                        userId,
+	                        CommissionStatus.DELETED
+	                )
+	                .stream()
+	                .map(CommissionResponseDto::from)
+	                .toList();
+	    }
 }

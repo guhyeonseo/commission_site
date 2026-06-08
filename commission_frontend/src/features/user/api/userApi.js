@@ -12,3 +12,17 @@ export const updateUser = async (data) => {
 
 export const updatePasswordApi = (data) =>
   apiClient.patch("user/password", data);
+
+export const getSellerProfile = async (id) => {
+  const res = await apiClient.get(`/user/${id}`);
+  return res.data;
+};
+
+export const getSellerCommissions = async (id) => {
+  const res = await apiClient.get(
+    `/user/${id}/commissions`
+  );
+
+  return res.data;
+};
+
