@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -70,6 +71,32 @@ public class InquiryController {
     ) {
         Long userId = Long.parseLong(auth.getName());
         inquiryService.deleteInquiry(inquiryId, userId);
+    }
+    
+    @GetMapping("/my")
+    public ResponseEntity<List<InquiryResponse>> getMyInquiries(
+            Authentication authentication
+    ) {
+
+        Long userId = (Long) authentication.getPrincipal();
+
+        return ResponseEntity.ok(
+                inquiryService.getMyInquiries(userId)
+        );
+    }
+
+    @GetMapping("/received")
+    public ResponseEntity<List<InquiryResponse>> getReceivedInquiries(
+            Authentication authentication
+    ) {
+
+        System.out.println(authentication);
+
+        Long userId = (Long) authentication.getPrincipal();
+
+        return ResponseEntity.ok(
+                inquiryService.getReceivedInquiries(userId)
+        );
     }
     
 }

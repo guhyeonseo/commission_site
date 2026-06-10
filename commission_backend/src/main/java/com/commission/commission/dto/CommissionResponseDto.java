@@ -29,6 +29,8 @@ public class CommissionResponseDto {
     
 	private Double avgRating;
 	private Integer reviewCount;
+	
+	private Integer viewCount;
     
     public static CommissionResponseDto from(Commission c) {
         List<String> images = c.getImages()
@@ -49,7 +51,8 @@ public class CommissionResponseDto {
                 images,
                 c.getStatus(),
                 c.getAvgRating(),
-                c.getReviewCount()
+                c.getReviewCount(),
+                c.getViewCount()
         );
     }
 }

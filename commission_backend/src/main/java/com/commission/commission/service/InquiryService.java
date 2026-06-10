@@ -164,5 +164,58 @@ public class InquiryService {
 
         inquiryRepository.delete(inquiry);
     }
+    
+    @Transactional(readOnly = true)
+    public List<InquiryResponse> getReceivedInquiries(Long userId) {
+
+        return inquiryRepository
+                .findReceivedInquiries(userId)
+                .stream()
+                .map(i -> InquiryResponse.builder()
+                        .id(i.getId())
+                        .writerId(i.getWriterId())
+                        .nickname(
+                            i.getWriter() != null
+                            ? i.getWriter().getNickname()
+                            : null
+                        )
+                        .content(i.getContent())
+                        .isSecret(i.isSecret())
+                        .parentId(i.getParentId())
+                        .createdAt(i.getCreatedAt().toString())
+                        .commissionId(i.getCommission().getId())
+                        .build())
+                .toList();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<InquiryResponse> getMyInquiries(Long userId) {
+
+    	return inquiryRepository
+                .findByWriterIdOrderByCreatedAtDesc(userId)
+                .stream()
+                .map(i -> {
+
+                    boolean hasReply =
+                            inquiryRepository.existsByParentId(i.getId());
+
+                    return InquiryResponse.builder()
+                            .id(i.getId())
+                            .writerId(i.getWriterId())
+                            .nickname(
+                                i.getWriter() != null
+                                ? i.getWriter().getNickname()
+                                : null
+                            )
+                            .content(i.getContent())
+                            .isSecret(i.isSecret())
+                            .parentId(i.getParentId())
+                            .createdAt(i.getCreatedAt().toString())
+                            .commissionId(i.getCommission().getId())
+                            .hasReply(hasReply)
+                            .build();
+                })
+                .toList();
+    }
 }
 

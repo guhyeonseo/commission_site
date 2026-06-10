@@ -3,6 +3,8 @@ package com.commission.commission.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.commission.commission.entity.Inquiry;
 
@@ -26,5 +28,16 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
             Long commissionId
     );
     
-    List<Inquiry> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Inquiry> findByWriterIdOrderByCreatedAtDesc(Long writerId);
+    
+    @Query("""
+    	    select i
+    	    from Inquiry i
+    	    join fetch i.commission c
+    	    where c.userId = :userId
+    	    order by i.createdAt desc
+    	""")
+    	List<Inquiry> findReceivedInquiries(
+    	        @Param("userId") Long userId
+    	);
 }

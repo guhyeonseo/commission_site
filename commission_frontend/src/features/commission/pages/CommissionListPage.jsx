@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function CommissionListPage() {
   const [list, setList] = useState([]);
+  console.log(list);
 
   const [keyword, setKeyword] = useState("");
   const [minPrice, setMinPrice] = useState("");
@@ -134,6 +135,10 @@ export default function CommissionListPage() {
                 <div>
                   ⭐ {c.avgRating?.toFixed(1) ?? 0}
                   ({c.reviewCount ?? 0})
+                </div>
+
+                <div>
+                  조회수 {c.viewCount ?? 0}
                 </div>
 
                 <div

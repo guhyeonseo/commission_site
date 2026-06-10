@@ -19,3 +19,13 @@ export const updateInquiry = (id, data) =>
 // 문의 삭제
 export const deleteInquiry = (id) =>
   apiClient.delete(`/inquiries/${id}`);
+
+export const getMyInquiries = async () => {
+  const res = await apiClient.get("/inquiries/my");
+  return res.data;
+};
+
+export const getReceivedInquiries = async () => {
+  const res = await apiClient.get("/inquiries/received");
+  return res.data;
+};

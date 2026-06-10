@@ -121,7 +121,8 @@ public class CommissionService {
 	                images,
 	                c.getStatus(),
 	                c.getAvgRating(),
-	                c.getReviewCount()
+	                c.getReviewCount(),
+	                c.getViewCount()
 	        );
 	    }
 

@@ -104,6 +104,10 @@ export default function CommissionDetailPage() {
         <div>💰 가격: {data.price?.toLocaleString()}원 ~</div>
         <div>⏱ 작업일: {data.estimatedDays}일</div>
 
+        <div>
+          조회수: {data.viewCount}
+        </div>
+
         <button onClick={() => navigate(`/users/${data.userId}`)}>
           {data.nickname}
         </button>

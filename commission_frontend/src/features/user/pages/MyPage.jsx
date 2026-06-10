@@ -1,23 +1,61 @@
 import { useEffect, useState } from "react";
+import { Navigate, Link } from "react-router-dom";
+
 import { getMyInfo } from "@/features/user/api/userApi";
+import {
+  getMyInquiries,
+  getReceivedInquiries,
+} from "@/features/inquiry/api/inquiryApi";
+
+import { useNavigate } from "react-router-dom";
+
 import UserEditForm from "../components/UserEditForm";
 import PasswordChangeForm from "../components/PasswordChangeForm";
-import { Link } from "react-router-dom";
 
 export default function MyPage() {
+
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
-  const [mode, setMode] = useState("view"); // view | edit | password
+  const [myInquiries, setMyInquiries] = useState([]);
+  const [receivedInquiries, setReceivedInquiries] = useState([]);
+  const [mode, setMode] = useState("view");
+
+  const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
     fetchUser();
+    loadInquiries();
   }, []);
 
   const fetchUser = async () => {
-    const data = await getMyInfo();
-    setUser(data);
+    try {
+      const data = await getMyInfo();
+      setUser(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  if (!user) return <div>로딩중...</div>;
+  const loadInquiries = async () => {
+    try {
+      const myData = await getMyInquiries();
+      setMyInquiries(myData);
+
+      const receivedData = await getReceivedInquiries();
+      setReceivedInquiries(receivedData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!user) {
+    return <div>로딩중...</div>;
+  }
 
   return (
     <div>
@@ -52,8 +90,7 @@ export default function MyPage() {
 
           <button
             onClick={() =>
-              window.location.href =
-              "/buyer/orders"
+              (window.location.href = "/buyer/orders")
             }
           >
             내 주문
@@ -61,8 +98,7 @@ export default function MyPage() {
 
           <button
             onClick={() =>
-              window.location.href =
-              "/artist/orders"
+              (window.location.href = "/artist/orders")
             }
           >
             판매 관리
@@ -70,17 +106,103 @@ export default function MyPage() {
 
           <button
             onClick={() =>
-              window.location.href =
-              "/my/commissions"
+              (window.location.href = "/my/commissions")
             }
           >
             내 커미션
           </button>
 
+          <br />
+          <br />
+
           <Link to="/my-reviews">
             내가 쓴 리뷰
           </Link>
 
+          <hr />
+
+          <h3>내가 작성한 문의</h3>
+
+          {myInquiries.map((inquiry) => {
+            if (inquiry.parentId) return null;
+
+            const reply = myInquiries.find(
+              (i) => i.parentId === inquiry.id
+            );
+
+            return (
+              <div
+                key={inquiry.id}
+                onClick={() =>
+                  navigate(`/commission/${inquiry.commissionId}`)
+                }
+                style={{
+                  border: "1px solid #ddd",
+                  padding: "10px",
+                  marginBottom: "10px",
+                  cursor: "pointer",
+                }}
+              >
+                <div>
+                  <strong>Q.</strong> {inquiry.content}
+
+                  {inquiry.hasReply && (
+                    <span style={{ color: "red", marginLeft: "10px" }}>
+                      🔴 답변 도착
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  {inquiry.createdAt}
+                </div>
+
+                {reply && (
+                  <div
+                    style={{
+                      marginTop: "10px",
+                      marginLeft: "20px",
+                      padding: "10px",
+                      background: "#f5f5f5",
+                    }}
+                  >
+                    <strong>A.</strong> {reply.content}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          <hr />
+
+          <h3>받은 문의</h3>
+
+          {receivedInquiries.length === 0 ? (
+            <p>받은 문의가 없습니다.</p>
+          ) : (
+            receivedInquiries.map((inquiry) => (
+              <div
+                onClick={() =>
+                  navigate(`/commission/${inquiry.commissionId}`)
+                }
+                key={inquiry.id}
+                style={{
+                  border: "1px solid #ddd",
+                  padding: "10px",
+                  marginBottom: "10px",
+                  cursor: "pointer",
+                }}
+              >
+                <div>
+                  작성자 : {inquiry.nickname}
+                </div>
+
+                <div>{inquiry.content}</div>
+
+                <small>{inquiry.createdAt}</small>
+              </div>
+            ))
+          )}
         </>
       )}
 
