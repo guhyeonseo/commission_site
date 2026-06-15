@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.commission.chat.service.ChatRoomService;
 import com.commission.commission.entity.Commission;
 import com.commission.commission.repository.CommissionRepository;
 import com.commission.commission.repository.ReviewRepository;
@@ -40,6 +41,7 @@ public class PaymentService {
 	private final UserRepository userRepository;
 	private final FileService fileService;
 	private final ReviewRepository reviewRepository;
+	private final ChatRoomService chatRoomService;
 
     @Transactional
     public PaymentCreateResponse create(
@@ -160,6 +162,17 @@ public class PaymentService {
         	);
 
         paymentRepository.save(payment);
+        
+        payment.setStatus(
+        	    PaymentStatus.WAITING_START
+        	);
+
+        	paymentRepository.save(payment);
+
+        	chatRoomService.createRoom(
+        	    payment.getBuyer().getId(),
+        	    payment.getCommission().getId()
+        	);
 
     }
     

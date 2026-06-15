@@ -27,6 +27,11 @@ import MyCommissionPage from "./features/commission/pages/MyCommissionPage";
 import MyReviewsPage from "./features/review/pages/MyReviewsPage";
 import SellerProfilePage from "./features/user/pages/SellerProfilePage";
 
+import ChatPage from "./features/chat/pages/ChatPage";
+
+import ChatRoomListPage from "./features/chat/pages/ChatRoomListPage";
+import ChatRoomPage from "./features/chat/pages/ChatRoomPage";
+
 function AppInner() {
 
   useEffect(() => {
@@ -90,6 +95,11 @@ function AppInner() {
         <Route path="/my-reviews" element={<MyReviewsPage />} />
 
         <Route path="/users/:id" element={<SellerProfilePage />} />
+
+        <Route path="/chat/:roomId" element={<ChatPage />} />
+
+        <Route path="/chat" element={<ChatRoomListPage />} />
+        <Route path="/chat/:roomId" element={<ChatRoomPage />} />
 
       </Routes>
 

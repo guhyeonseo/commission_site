@@ -113,6 +113,18 @@ public class SecurityConfig {
 	                	    "/api/user/*/commissions"
 	                	).permitAll()
 	                
+	                .requestMatchers(
+	                	    "/ws/**",
+	                	    "/ws"
+	                	).permitAll()
+	                
+//	                .requestMatchers(
+//	                	    HttpMethod.GET,
+//	                	    "/api/chat-rooms/**"
+//	                	).permitAll()
+	                
+	                .requestMatchers("/api/chat-rooms/**").permitAll()
+	                
 	                //임시 테스트용
 	                .requestMatchers(
 	                	    "/api/payments/**"

@@ -11,6 +11,8 @@ import { getReviews } from "@/features/review/api/reviewApi";
 
 import { useNavigate } from "react-router-dom";
 
+import { createChatRoom } from "@/features/chat/api/chatApi";
+
 import "./CommissionDetailPage.css";
 
 export default function CommissionDetailPage() {
@@ -24,6 +26,25 @@ export default function CommissionDetailPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const [reviews, setReviews] = useState([]);
+
+  const handleChat = async () => {
+
+    try {
+
+      const room =
+        await createChatRoom(
+          data.id
+        );
+
+      navigate(
+        `/chat/${room.roomId}`
+      );
+
+    } catch (err) {
+
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     getCommissionDetail(id).then((res) => {
@@ -110,6 +131,10 @@ export default function CommissionDetailPage() {
 
         <button onClick={() => navigate(`/users/${data.userId}`)}>
           {data.nickname}
+        </button>
+
+        <button onClick={handleChat}>
+          채팅하기
         </button>
 
         <PaymentButton

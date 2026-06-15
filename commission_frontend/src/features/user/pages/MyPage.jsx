@@ -119,6 +119,14 @@ export default function MyPage() {
             내가 쓴 리뷰
           </Link>
 
+          <button
+            onClick={() =>
+              navigate("/chat")
+            }
+          >
+            내 채팅방
+          </button>
+
           <hr />
 
           <h3>내가 작성한 문의</h3>
