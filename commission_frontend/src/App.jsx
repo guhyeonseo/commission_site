@@ -32,6 +32,13 @@ import ChatPage from "./features/chat/pages/ChatPage";
 import ChatRoomListPage from "./features/chat/pages/ChatRoomListPage";
 import ChatRoomPage from "./features/chat/pages/ChatRoomPage";
 
+import FreeBoardPage from "./features/board/pages/FreeBoardPage";
+import NoticeBoardPage from "./features/board/pages/NoticeBoardPage";
+import BoardDetailPage from "./features/board/pages/BoardDetailPage";
+import BoardWritePage from "./features/board/pages/BoardWritePage";
+
+import BoardEditPage from "./features/board/pages/BoardEditPage";
+
 function AppInner() {
 
   useEffect(() => {
@@ -100,6 +107,24 @@ function AppInner() {
 
         <Route path="/chat" element={<ChatRoomListPage />} />
         <Route path="/chat/:roomId" element={<ChatRoomPage />} />
+
+        <Route path="/boards/free" element={<FreeBoardPage />} />
+        <Route path="/boards/notice" element={<NoticeBoardPage />} />
+
+        <Route path="/boards/:boardId" element={<BoardDetailPage />} />
+
+        <Route path="/boards/write" element={<ProtectedRoute>
+          <BoardWritePage />
+        </ProtectedRoute>} />
+
+        <Route
+          path="/boards/edit/:boardId"
+          element={
+            <ProtectedRoute>
+              <BoardEditPage />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
 

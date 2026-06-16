@@ -118,6 +118,12 @@ public class SecurityConfig {
 	                	    "/ws"
 	                	).permitAll()
 	                
+	                .requestMatchers(
+	                	    HttpMethod.GET,
+	                	    "/api/boards",
+	                	    "/api/boards/**"
+	                	).permitAll()
+	                
 //	                .requestMatchers(
 //	                	    HttpMethod.GET,
 //	                	    "/api/chat-rooms/**"
