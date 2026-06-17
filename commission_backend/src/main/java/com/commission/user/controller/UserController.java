@@ -26,6 +26,7 @@ import com.commission.user.dto.SellerProfileResponseDto;
 import com.commission.user.dto.UserResponseDto;
 import com.commission.user.dto.UserUpdateRequestDto;
 import com.commission.user.entity.User;
+import com.commission.user.entity.UserStatus;
 import com.commission.user.repository.UserRepository;
 import com.commission.user.service.UserService;
 
@@ -72,6 +73,10 @@ public class UserController {
 	    		dto.getUsername(),
 	    		dto.getPassword()
 	    );
+	    
+	    if (user.getStatus() == UserStatus.SUSPENDED) {
+	        throw new RuntimeException("정지된 계정입니다.");
+	    }
 
 	    String accessToken = jwtUtil.createToken(
 	    		user.getId(),

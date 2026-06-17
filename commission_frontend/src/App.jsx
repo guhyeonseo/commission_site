@@ -39,6 +39,9 @@ import BoardWritePage from "./features/board/pages/BoardWritePage";
 
 import BoardEditPage from "./features/board/pages/BoardEditPage";
 
+import AdminPage from "./features/admin/pages/AdminPage";
+import AdminRoute from "./routes/AdminRoute";
+
 function AppInner() {
 
   useEffect(() => {
@@ -81,16 +84,6 @@ function AppInner() {
             </ProtectedRoute>
           }
         />
-
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute role="ADMIN">
-              {/* <AdminPage /> */}
-            </ProtectedRoute>
-          }
-        />
-
         <Route path="/payment/success" element={<PaymentSuccessPage />} />
         <Route path="/payment/fail" element={<PaymentFailPage />} />
 
@@ -123,6 +116,15 @@ function AppInner() {
             <ProtectedRoute>
               <BoardEditPage />
             </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPage />
+            </AdminRoute>
           }
         />
 

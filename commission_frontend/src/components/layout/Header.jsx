@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../../services/apiClient";
 import "./Header.css"
 import logo from "../../assets/logo.png";
@@ -45,6 +45,11 @@ const Header = () => {
             <span className="nickname">{nickname}님</span>
             <button onClick={handleLogout}>로그아웃</button>
             <a className="headerMyPage" href="/myPage">마이페이지</a>
+            {auth.role === "ADMIN" && (
+              <Link to="/admin">
+                관리자
+              </Link>
+            )}
           </>
         ) : (
           <>

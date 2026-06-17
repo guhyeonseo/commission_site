@@ -124,6 +124,9 @@ public class SecurityConfig {
 	                	    "/api/boards/**"
 	                	).permitAll()
 	                
+	                .requestMatchers("/api/admin/**")
+	                .hasRole("ADMIN")
+	                
 //	                .requestMatchers(
 //	                	    HttpMethod.GET,
 //	                	    "/api/chat-rooms/**"
