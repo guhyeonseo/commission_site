@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { updateUser } from "@/features/user/api/userApi";
+import styles from "./UserEditForm.module.css";
 
 export default function UserEditForm({ user, onSuccess, onCancel }) {
   const [form, setForm] = useState({
@@ -8,7 +9,12 @@ export default function UserEditForm({ user, onSuccess, onCancel }) {
   });
 
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(user.profileImage || null);
+
+  const [preview, setPreview] = useState(
+    user.profileImage
+      ? `http://localhost:8484${user.profileImage}`
+      : null
+  );
 
   const handleChange = (e) => {
     setForm({
@@ -23,7 +29,7 @@ export default function UserEditForm({ user, onSuccess, onCancel }) {
     if (!selected) return;
 
     setFile(selected);
-    setPreview(URL.createObjectURL(selected)); 
+    setPreview(URL.createObjectURL(selected));
   };
 
   const handleSubmit = async (e) => {
@@ -48,43 +54,76 @@ export default function UserEditForm({ user, onSuccess, onCancel }) {
       alert("수정 완료");
       onSuccess();
     } catch (e) {
-      console.log("수정 실패", e);
+      console.error("수정 실패", e);
       alert("수정 실패");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>회원정보 수정</h2>
+    <form
+      className={styles.form}
+      onSubmit={handleSubmit}
+    >
+      <h2 className={styles.title}>
+        회원정보 수정
+      </h2>
 
-      {/* 프로필 이미지 */}
-      {preview && (
-        <img src={preview} alt="프로필" width={100} />
-      )}
+      <div className={styles.profileSection}>
+        {preview ? (
+          <img
+            src={preview}
+            alt="프로필"
+            className={styles.profileImage}
+          />
+        ) : (
+          <div className={styles.profilePlaceholder}>
+            이미지 없음
+          </div>
+        )}
 
-      <input type="file" onChange={handleFileChange} />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+      </div>
 
-      {/* 닉네임 */}
-      <input
-        name="nickname"
-        value={form.nickname}
-        onChange={handleChange}
-        placeholder="닉네임"
-      />
+      <div className={styles.inputGroup}>
+        <label>닉네임</label>
+        <input
+          type="text"
+          name="nickname"
+          value={form.nickname}
+          onChange={handleChange}
+        />
+      </div>
 
-      {/* 소개 */}
-      <input
-        name="bio"
-        value={form.bio}
-        onChange={handleChange}
-        placeholder="소개"
-      />
+      <div className={styles.inputGroup}>
+        <label>소개</label>
+        <textarea
+          name="bio"
+          value={form.bio}
+          onChange={handleChange}
+          rows={4}
+        />
+      </div>
 
-      <button type="submit">저장</button>
+      <div className={styles.buttonGroup}>
+        <button
+          type="submit"
+          className={styles.saveBtn}
+        >
+          저장
+        </button>
 
-      <button type="button" onClick={onCancel}>
-        취소
-      </button>
+        <button
+          type="button"
+          className={styles.cancelBtn}
+          onClick={onCancel}
+        >
+          취소
+        </button>
+      </div>
     </form>
   );
 }

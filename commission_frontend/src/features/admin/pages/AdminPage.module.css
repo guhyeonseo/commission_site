@@ -1,0 +1,88 @@
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: #f8fafc;
+}
+
+.table th {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.active {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.suspended {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+.adminRole {
+  color: #9333ea;
+  font-weight: bold;
+}
+
+.userRole {
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+}
+
+.suspendButton {
+  background: #dc2626;
+}
+
+.suspendButton:hover {
+  background: #b91c1c;
+}
+
+.activateButton {
+  background: #16a34a;
+}
+
+.activateButton:hover {
+  background: #15803d;
+}

@@ -106,12 +106,19 @@ public class CommissionController {
     ) {
 
         Long userId =
-                (Long) authentication
-                        .getPrincipal();
+                (Long) authentication.getPrincipal();
+
+        String role =
+                authentication
+                        .getAuthorities()
+                        .iterator()
+                        .next()
+                        .getAuthority();
 
         commissionService.deleteCommission(
                 id,
-                userId
+                userId,
+                role
         );
     }
     

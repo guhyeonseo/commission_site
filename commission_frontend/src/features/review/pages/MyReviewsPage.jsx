@@ -1,65 +1,63 @@
 import { useEffect, useState } from "react";
 import { getMyReviews } from "../api/reviewApi";
+import styles from "./MyReviewsPage.module.css";
 
 export default function MyReviewsPage() {
-
-  const [reviews, setReviews] =
-    useState([]);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-
-    getMyReviews()
-      .then(res => {
-        setReviews(res.data);
-      });
-
+    getMyReviews().then((res) => {
+      setReviews(res.data);
+    });
   }, []);
 
-  return (
-    <div>
+  const renderStars = (rating) => {
+    return (
+      "★".repeat(Math.floor(rating)) +
+      "☆".repeat(5 - Math.floor(rating))
+    );
+  };
 
-      <h2>내가 작성한 리뷰</h2>
+  return (
+    <div className={styles.container}>
+      <h2 className={styles.title}>
+        내가 작성한 리뷰
+      </h2>
 
       {reviews.length === 0 ? (
-
-        <p>작성한 리뷰가 없습니다.</p>
-
+        <div className={styles.empty}>
+          작성한 리뷰가 없습니다.
+        </div>
       ) : (
-
-        reviews.map(review => (
-
+        reviews.map((review) => (
           <div
             key={review.id}
-            style={{
-              border: "1px solid #ddd",
-              padding: "15px",
-              marginBottom: "10px"
-            }}
+            className={styles.card}
           >
-
-            <div>
-              커미션 :
-              {review.commissionTitle}
+            <div className={styles.row}>
+              <span>커미션</span>
+              <strong>
+                {review.commissionTitle}
+              </strong>
             </div>
 
-            <div>
-              {"★".repeat(Math.floor(review.rating))}
-              {"☆".repeat(5 - Math.floor(review.rating))}
-              ({review.rating})
+            <div className={styles.rating}>
+              {renderStars(review.rating)}
+              <span className={styles.score}>
+                ({review.rating})
+              </span>
             </div>
 
-            <div>
+            <div className={styles.content}>
               {review.content}
             </div>
 
-            <div>
+            <div className={styles.date}>
               {review.createdAt}
             </div>
-
           </div>
         ))
       )}
-
     </div>
   );
 }

@@ -144,7 +144,8 @@ public class CommissionService {
 	    @Transactional
 	    public void deleteCommission(
 	            Long commissionId,
-	            Long userId
+	            Long userId,
+	            String role
 	    ) {
 
 	        Commission commission =
@@ -152,23 +153,25 @@ public class CommissionService {
 	                .findById(commissionId)
 	                .orElseThrow();
 
-	        // 권한 체크
-	        if (!commission.getUserId()
-	                .equals(userId)) {
+	        boolean isOwner =
+	                commission.getUserId()
+	                        .equals(userId);
+
+	        boolean isAdmin =
+	                "ROLE_ADMIN".equals(role);
+
+	        if (!isOwner && !isAdmin) {
 
 	            throw new RuntimeException(
 	                    "권한 없음"
 	            );
 	        }
-
-	        // 진행중 거래 확인
 	        boolean hasActivePayment =
 	                paymentRepository
 	                .existsByCommission_IdAndStatusIn(
 	                        commissionId,
-
 	                        List.of(
-	                        		PaymentStatus.READY,
+	                                PaymentStatus.READY,
 	                                PaymentStatus.IN_PROGRESS
 	                        )
 	                );
@@ -180,14 +183,12 @@ public class CommissionService {
 	            );
 	        }
 
-	        // 거래 기록 존재 여부
 	        boolean hasPayment =
 	                paymentRepository
 	                .existsByCommission_Id(
 	                        commissionId
 	                );
 
-	        // 거래 기록 있으면 상태만 변경
 	        if (hasPayment) {
 
 	            commission.setStatus(
@@ -197,18 +198,15 @@ public class CommissionService {
 	            return;
 	        }
 
-	        // 문의 삭제
 	        inquiryRepository
 	                .deleteByCommission_Id(
 	                        commissionId
 	                );
 
-	        // 파일 삭제
 	        fileService.deleteFile(
 	                commission.getThumbnailUrl()
 	        );
 
-	        // 실제 삭제
 	        commissionRepository.delete(
 	                commission
 	        );

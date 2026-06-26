@@ -1,0 +1,121 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.empty {
+  text-align: center;
+  padding: 60px;
+  color: #666;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.waiting {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.progress {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.done {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.canceled {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.downloadBtn,
+.completeBtn,
+.cancelBtn,
+.reviewBtn {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: white;
+  cursor: pointer;
+}
+
+.downloadBtn {
+  background: #2563eb;
+}
+
+.completeBtn {
+  background: #16a34a;
+}
+
+.cancelBtn {
+  background: #dc2626;
+}
+
+.reviewBtn {
+  background: #7c3aed;
+}
+
+.reviewBox {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reviewBox input,
+.reviewBox textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.reviewBox textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.reviewDone {
+  margin-top: 16px;
+  font-weight: 600;
+  color: #16a34a;
+}

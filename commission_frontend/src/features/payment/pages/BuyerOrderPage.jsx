@@ -1,104 +1,68 @@
 import { useEffect, useState } from "react";
-
 import {
   getBuyerOrders,
   completePayment,
-  cancelPayment
+  cancelPayment,
 } from "../api/paymentApi";
 
 import { createReview } from "@/features/review/api/reviewApi";
 
-export default function BuyerOrderPage() {
+import styles from "./BuyerOrderPage.module.css";
 
+export default function BuyerOrderPage() {
+  const [list, setList] = useState([]);
   const [reviewData, setReviewData] = useState({});
 
-  const [list, setList] =
-    useState([]);
-
   const load = async () => {
-
-    const res =
-      await getBuyerOrders();
-
-    console.log(
-      JSON.stringify(
-        res.data,
-        null,
-        2
-      )
-    );
+    const res = await getBuyerOrders();
     setList(res.data);
   };
-
 
   useEffect(() => {
     load();
   }, []);
 
-  const handleComplete =
-    async (paymentId) => {
+  const handleComplete = async (paymentId) => {
+    await completePayment(paymentId);
+    load();
+  };
 
-      await completePayment(
-        paymentId
-      );
-
-      load();
-    };
-
-  const handleCancel = async (
-    paymentId
-  ) => {
-
+  const handleCancel = async (paymentId) => {
     await cancelPayment(paymentId);
-
     load();
   };
 
   const getStatusText = (status) => {
-
     switch (status) {
-
       case "WAITING_START":
         return "작업 대기";
-
       case "IN_PROGRESS":
-        return "작업중";
-
+        return "작업 중";
       case "WORK_DONE":
         return "작업 완료";
-
       case "COMPLETED":
         return "거래 완료";
-
       case "CANCELED":
         return "주문 취소";
-
       default:
         return status;
     }
   };
 
-  const getStatusColor = (status) => {
-
+  const getStatusClass = (status) => {
     switch (status) {
-
       case "WAITING_START":
-        return "#f59e0b";
-
+        return styles.waiting;
       case "IN_PROGRESS":
-        return "#3b82f6";
-
+        return styles.progress;
       case "WORK_DONE":
-        return "#8b5cf6";
-
+        return styles.done;
       case "COMPLETED":
-        return "#22c55e";
-
+        return styles.completed;
       case "CANCELED":
-        return "#ef4444";
-
+        return styles.canceled;
       default:
-        return "#999";
+        return "";
     }
   };
 
@@ -107,193 +71,154 @@ export default function BuyerOrderPage() {
     field,
     value
   ) => {
-
-    setReviewData(prev => ({
+    setReviewData((prev) => ({
       ...prev,
       [paymentId]: {
         ...prev[paymentId],
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
-  const handleReview = async (
-    paymentId
-  ) => {
-
-    const review =
-      reviewData[paymentId];
+  const handleReview = async (paymentId) => {
+    const review = reviewData[paymentId];
 
     try {
-
       await createReview({
         paymentId,
-        rating:
-          Number(review?.rating ?? 5),
-        content:
-          review?.content ?? ""
+        rating: Number(review?.rating ?? 5),
+        content: review?.content ?? "",
       });
 
       alert("리뷰 작성 완료");
-
       load();
-
     } catch (e) {
-
       console.log(e);
-
       alert("리뷰 작성 실패");
     }
   };
 
   return (
-    <div>
+    <div className={styles.container}>
+      <h2 className={styles.title}>내 주문</h2>
 
-      <h2>내 주문</h2>
+      {list.length === 0 ? (
+        <div className={styles.empty}>
+          주문 내역이 없습니다.
+        </div>
+      ) : (
+        list.map((item) => (
+          <div
+            key={item.id}
+            className={styles.card}
+          >
+            <div className={styles.row}>
+              <span>커미션</span>
+              <strong>{item.commissionTitle}</strong>
+            </div>
 
-      {list.map(item => (
+            <div className={styles.row}>
+              <span>상태</span>
 
-        <div
-          key={item.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "20px",
-            marginBottom: "20px"
-          }}
-        >
+              <span
+                className={`${styles.statusBadge} ${getStatusClass(
+                  item.status
+                )}`}
+              >
+                {getStatusText(item.status)}
+              </span>
+            </div>
 
-          <div>
-            커미션:
-            {item.commissionTitle}
-          </div>
-
-          <div>
-
-            상태:
-
-            <span
-              style={{
-                background:
-                  getStatusColor(item.status),
-
-                color: "white",
-
-                padding: "4px 10px",
-
-                borderRadius: "999px",
-
-                marginLeft: "8px",
-
-                fontSize: "14px"
-              }}
-            >
-              {getStatusText(item.status)}
-            </span>
-
-          </div>
-
-          {item.status ===
-            "WORK_DONE" && (
-
-              <div>
-
+            {item.status === "WORK_DONE" && (
+              <div className={styles.buttonGroup}>
                 <a
-                  href={
-                    `http://localhost:8484${item.resultUrl}`
-                  }
+                  href={`http://localhost:8484${item.resultUrl}`}
                   download
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button>
+                  <button className={styles.downloadBtn}>
                     결과물 다운로드
                   </button>
                 </a>
 
                 <button
+                  className={styles.completeBtn}
                   onClick={() =>
-                    handleComplete(
-                      item.id
-                    )
+                    handleComplete(item.id)
                   }
                 >
                   구매 확정
                 </button>
 
-              </div>
-            )}
-
-          {item.status === "COMPLETED" &&
-            !item.reviewed && (
-
-              <div
-                style={{
-                  marginTop: "10px"
-                }}
-              >
-
-                <input
-                  type="number"
-                  min="0"
-                  max="5"
-                  step="0.5"
-                  placeholder="별점"
-
-                  value={
-                    reviewData[item.id]
-                      ?.rating ?? 5
-                  }
-
-                  onChange={(e) =>
-                    handleReviewChange(
-                      item.id,
-                      "rating",
-                      e.target.value
-                    )
-                  }
-                />
-
-                <br />
-
-                <textarea
-                  placeholder="리뷰 내용"
-
-                  value={
-                    reviewData[item.id]
-                      ?.content ?? ""
-                  }
-
-                  onChange={(e) =>
-                    handleReviewChange(
-                      item.id,
-                      "content",
-                      e.target.value
-                    )
-                  }
-                />
-
-                <br />
-
                 <button
+                  className={styles.cancelBtn}
                   onClick={() =>
-                    handleReview(item.id)
+                    handleCancel(item.id)
                   }
                 >
-                  리뷰 작성
+                  주문 취소
                 </button>
-
               </div>
             )}
 
-          {item.status === "COMPLETED" &&
-            item.reviewed && (
-              <div>
-                ✅ 리뷰 작성 완료
-              </div>
-            )}
-        </div>
-      ))}
+            {item.status === "COMPLETED" &&
+              !item.reviewed && (
+                <div className={styles.reviewBox}>
+                  <input
+                    type="number"
+                    min="0"
+                    max="5"
+                    step="0.5"
+                    placeholder="별점"
+                    value={
+                      reviewData[item.id]
+                        ?.rating ?? 5
+                    }
+                    onChange={(e) =>
+                      handleReviewChange(
+                        item.id,
+                        "rating",
+                        e.target.value
+                      )
+                    }
+                  />
 
+                  <textarea
+                    placeholder="리뷰 내용을 입력해주세요"
+                    value={
+                      reviewData[item.id]
+                        ?.content ?? ""
+                    }
+                    onChange={(e) =>
+                      handleReviewChange(
+                        item.id,
+                        "content",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <button
+                    className={styles.reviewBtn}
+                    onClick={() =>
+                      handleReview(item.id)
+                    }
+                  >
+                    리뷰 작성
+                  </button>
+                </div>
+              )}
+
+            {item.status === "COMPLETED" &&
+              item.reviewed && (
+                <div className={styles.reviewDone}>
+                  ✅ 리뷰 작성 완료
+                </div>
+              )}
+          </div>
+        ))
+      )}
     </div>
   );
 }

@@ -64,73 +64,90 @@ function AppInner() {
 
   return (
     <BrowserRouter>
-      <Header />
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      <div className="app">
 
-        <Route path="/commissionList" element={<CommissionListPage />} />
-        <Route path="/commission/:id" element={<CommissionDetailPage />} />
+        <Header />
 
-        <Route path="/mypage" element={<Mypage />} />
+        <main className="main">
 
-        <Route
-          path="/create"
-          element={
-            <ProtectedRoute>
-              <CommissionCreatePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/payment/success" element={<PaymentSuccessPage />} />
-        <Route path="/payment/fail" element={<PaymentFailPage />} />
+          <Routes>
 
-        <Route path="/artist/orders" element={<ArtistOrderPage />} />
-        <Route path="/buyer/orders" element={<BuyerOrderPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
 
-        <Route path="/my/commissions" element={<MyCommissionPage />} />
+            <Route path="/commissionList" element={<CommissionListPage />} />
+            <Route path="/commission/:id" element={<CommissionDetailPage />} />
 
-        <Route path="/my-reviews" element={<MyReviewsPage />} />
+            <Route path="/mypage" element={<Mypage />} />
 
-        <Route path="/users/:id" element={<SellerProfilePage />} />
+            <Route
+              path="/create"
+              element={
+                <ProtectedRoute>
+                  <CommissionCreatePage />
+                </ProtectedRoute>
+              }
+            />
 
-        <Route path="/chat/:roomId" element={<ChatPage />} />
+            <Route path="/payment/success" element={<PaymentSuccessPage />} />
+            <Route path="/payment/fail" element={<PaymentFailPage />} />
 
-        <Route path="/chat" element={<ChatRoomListPage />} />
-        <Route path="/chat/:roomId" element={<ChatRoomPage />} />
+            <Route path="/artist/orders" element={<ArtistOrderPage />} />
+            <Route path="/buyer/orders" element={<BuyerOrderPage />} />
 
-        <Route path="/boards/free" element={<FreeBoardPage />} />
-        <Route path="/boards/notice" element={<NoticeBoardPage />} />
+            <Route path="/my/commissions" element={<MyCommissionPage />} />
 
-        <Route path="/boards/:boardId" element={<BoardDetailPage />} />
+            <Route path="/my-reviews" element={<MyReviewsPage />} />
 
-        <Route path="/boards/write" element={<ProtectedRoute>
-          <BoardWritePage />
-        </ProtectedRoute>} />
+            <Route path="/users/:id" element={<SellerProfilePage />} />
 
-        <Route
-          path="/boards/edit/:boardId"
-          element={
-            <ProtectedRoute>
-              <BoardEditPage />
-            </ProtectedRoute>
-          }
-        />
+            <Route path="/chat/:roomId" element={<ChatPage />} />
 
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <AdminPage />
-            </AdminRoute>
-          }
-        />
+            <Route path="/chat" element={<ChatRoomListPage />} />
+            <Route path="/chat/:roomId" element={<ChatRoomPage />} />
 
-      </Routes>
+            <Route path="/boards/free" element={<FreeBoardPage />} />
+            <Route path="/boards/notice" element={<NoticeBoardPage />} />
 
-      <Footer />
+            <Route path="/boards/:boardId" element={<BoardDetailPage />} />
+
+            <Route
+              path="/boards/write"
+              element={
+                <ProtectedRoute>
+                  <BoardWritePage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/boards/edit/:boardId"
+              element={
+                <ProtectedRoute>
+                  <BoardEditPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminPage />
+                </AdminRoute>
+              }
+            />
+
+          </Routes>
+
+        </main>
+
+        <Footer />
+
+      </div>
+
     </BrowserRouter>
   );
 }

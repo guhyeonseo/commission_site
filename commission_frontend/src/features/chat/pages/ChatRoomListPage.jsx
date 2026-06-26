@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyRooms } from "../api/chatApi";
 
+import styles from "./ChatRoomListPage.module.css";
+
 export default function ChatRoomListPage() {
   const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
@@ -20,55 +22,35 @@ export default function ChatRoomListPage() {
   };
 
   return (
-    <div>
-      <h2>내 채팅방</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>내 채팅방</h2>
 
       {rooms.length === 0 ? (
-        <p>채팅방이 없습니다.</p>
+        <div className={styles.empty}>
+          채팅방이 없습니다.
+        </div>
       ) : (
         rooms.map((room) => (
           <div
             key={room.roomId}
-            onClick={() => navigate(`/chat/${room.roomId}`)}
-            style={{
-              border: "1px solid #ddd",
-              padding: "12px",
-              marginBottom: "10px",
-              cursor: "pointer",
-            }}
+            className={styles.card}
+            onClick={() =>
+              navigate(`/chat/${room.roomId}`)
+            }
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <strong>
+            <div className={styles.header}>
+              <strong className={styles.roomTitle}>
                 {room.commissionTitle}
               </strong>
 
               {room.unreadCount > 0 && (
-                <span
-                  style={{
-                    background: "red",
-                    color: "white",
-                    borderRadius: "50%",
-                    minWidth: "24px",
-                    height: "24px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "12px",
-                    fontWeight: "bold",
-                  }}
-                >
+                <span className={styles.badge}>
                   {room.unreadCount}
                 </span>
               )}
             </div>
 
-            <div>
+            <div className={styles.user}>
               상대방 : {room.otherUserNickname}
             </div>
           </div>

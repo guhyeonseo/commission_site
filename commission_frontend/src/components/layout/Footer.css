@@ -1,0 +1,36 @@
+.footer {
+
+  background: #2f2f2f;
+
+  color: white;
+
+  padding: 40px 20px;
+}
+
+.footerContent {
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.footerLeft h3 {
+
+  margin-bottom: 10px;
+}
+
+.footerLeft p,
+.footerRight p {
+
+  color: #cccccc;
+
+  margin: 5px 0;
+}

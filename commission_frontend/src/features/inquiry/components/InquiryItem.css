@@ -1,0 +1,156 @@
+.inquiry-item {
+  padding: 18px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.inquiry-item.reply {
+  margin-left: 40px;
+  padding-left: 20px;
+  border-left: 3px solid #4caf50;
+  background: #fafafa;
+}
+
+.inquiry-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #888;
+}
+
+.inquiry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.inquiry-content {
+  flex: 1;
+  line-height: 1.7;
+  font-size: 15px;
+  word-break: break-word;
+}
+
+.inquiry-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.reply-badge {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #4caf50;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.secret-badge {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #757575;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.edit-btn,
+.delete-btn,
+.reply-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.edit-btn {
+  background: #2196f3;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #1976d2;
+}
+
+.delete-btn {
+  background: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #d32f2f;
+}
+
+.reply-btn {
+  background: #4caf50;
+  color: white;
+}
+
+.reply-btn:hover {
+  background: #43a047;
+}
+
+.edit-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.reply-form {
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.secret-message {
+  padding: 15px;
+  border-radius: 10px;
+  background: #f5f5f5;
+  color: #666;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+
+  .inquiry-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .inquiry-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .inquiry-item.reply {
+    margin-left: 15px;
+    padding-left: 15px;
+  }
+
+  .inquiry-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

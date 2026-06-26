@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { updatePasswordApi } from "@/features/user/api/userApi";
+import styles from "./PasswordChangeForm.module.css";
 
-export default function PasswordChangeForm({ onSuccess, onCancel }) {
+export default function PasswordChangeForm({
+  onSuccess,
+  onCancel,
+}) {
   const [form, setForm] = useState({
     currentPassword: "",
     newPassword: "",
@@ -15,7 +19,9 @@ export default function PasswordChangeForm({ onSuccess, onCancel }) {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (form.newPassword !== form.confirmPassword) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
@@ -23,23 +29,72 @@ export default function PasswordChangeForm({ onSuccess, onCancel }) {
 
     try {
       await updatePasswordApi(form);
+
       alert("비밀번호 변경 완료");
       onSuccess();
     } catch (e) {
-      alert(e.response?.data?.message);
+      alert(
+        e.response?.data?.message ||
+          "비밀번호 변경 실패"
+      );
     }
   };
 
   return (
-    <div>
-      <h2>비밀번호 변경</h2>
+    <form
+      className={styles.form}
+      onSubmit={handleSubmit}
+    >
+      <h2 className={styles.title}>
+        비밀번호 변경
+      </h2>
 
-      <input name="currentPassword" type="password" placeholder="현재 비밀번호" onChange={handleChange} />
-      <input name="newPassword" type="password" placeholder="새 비밀번호" onChange={handleChange} />
-      <input name="confirmPassword" type="password" placeholder="확인" onChange={handleChange} />
+      <div className={styles.inputGroup}>
+        <label>현재 비밀번호</label>
+        <input
+          type="password"
+          name="currentPassword"
+          value={form.currentPassword}
+          onChange={handleChange}
+        />
+      </div>
 
-      <button onClick={handleSubmit}>변경</button>
-      <button onClick={onCancel}>취소</button>
-    </div>
+      <div className={styles.inputGroup}>
+        <label>새 비밀번호</label>
+        <input
+          type="password"
+          name="newPassword"
+          value={form.newPassword}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className={styles.inputGroup}>
+        <label>새 비밀번호 확인</label>
+        <input
+          type="password"
+          name="confirmPassword"
+          value={form.confirmPassword}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className={styles.buttonGroup}>
+        <button
+          type="submit"
+          className={styles.saveBtn}
+        >
+          변경
+        </button>
+
+        <button
+          type="button"
+          className={styles.cancelBtn}
+          onClick={onCancel}
+        >
+          취소
+        </button>
+      </div>
+    </form>
   );
 }

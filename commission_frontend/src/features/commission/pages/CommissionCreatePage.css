@@ -2,7 +2,27 @@
 .create-container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 100px 20px;
+  padding: 24px;
+}
+
+/* 제목 */
+.create-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* 폼 */
+.create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .input-category {
@@ -13,83 +33,64 @@
   width: 600px;
 }
 
+/* 입력 공통 */
+.create-form input,
+.create-form textarea,
+.create-form select {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* 대표 이미지 버튼 영역 */
 .thumbnail-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  /* label이랑 버튼 사이 간격 */
 }
 
 .button-thumbnail {
   width: 100px;
 }
 
-/* 제목 */
-.create-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 25px;
-}
-
-/* 폼 */
-.create-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* 입력 공통 */
-.create-form input,
-.create-form textarea,
-.create-form select {
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ddd;
-}
-
 /* ---------------------- */
-/* 🔥 에디터 */
+/* 에디터 */
 /* ---------------------- */
-
-/* 툴바 */
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-bottom: none;
-  margin-bottom: -12px;
-  background: #fafafa;
-}
 
 .toolbar {
   position: relative;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  padding: 10px;
+
+  border: 1px solid #ddd;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+
+  background: #f8fafc;
 }
 
-/* 툴바 버튼 (아이콘 느낌) */
 .toolbar button {
   background: white;
   border: 1px solid #ddd;
   padding: 6px 10px;
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.15s;
-}
-
-.toolbar button:hover {
-  background: #f0f0f0;
-}
-
-.toolbar button:active {
-  transform: scale(0.95);
 }
 
 .input-with-unit {
   width: 300px;
+
   display: flex;
   align-items: center;
+
   border: 1px solid #ddd;
+  border-radius: 8px;
+
   margin: 8px 0;
 }
 
@@ -102,14 +103,16 @@
 .input-with-unit span {
   padding: 0 10px;
   color: #666;
+  white-space: nowrap;
 }
 
-/* 에디터 박스 */
 .editor {
   border: 1px solid #ddd;
+  border-radius: 0 0 8px 8px;
   background: white;
+
   min-height: 500px;
-  height: auto;
+  overflow: hidden;
 }
 
 .editor .ProseMirror img {
@@ -122,31 +125,22 @@
 /* 실제 입력 영역 */
 .ProseMirror {
   padding: 12px;
-  min-height: 200px;
-  outline: none;
+  min-height: 500px;
 
+  outline: none;
   font-size: 14px;
-  /* ✅ 최소값이랑 맞추기 */
-  line-height: 1;
+  line-height: 1.4;
   word-break: break-word;
 }
 
-/* 🔥 폰트 사이즈 적용 핵심 */
 .ProseMirror span[style*="font-size"] {
   line-height: 1.4;
 }
 
-/* 큰 글씨 줄간격 보정 */
-.ProseMirror span[style*="font-size"] {
-  line-height: 1.4;
-}
-
-/* 문단 */
 .ProseMirror p {
   margin: 10px 0;
 }
 
-/* 제목 충돌 방지 */
 .ProseMirror h1,
 .ProseMirror h2,
 .ProseMirror h3 {
@@ -154,23 +148,31 @@
   font-weight: bold;
 }
 
-/* 리스트 */
-.ProseMirror ul {
-  padding-left: 20px;
-}
-
+.ProseMirror ul,
 .ProseMirror ol {
   padding-left: 20px;
 }
 
-/* 이미지 */
 .ProseMirror img {
   max-width: 100%;
   margin: 10px 0;
 }
 
 /* ---------------------- */
-/* 🔥 대표 이미지 */
+/* 가격 / 작업일 */
+/* ---------------------- */
+
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+.field {
+  flex: 1;
+}
+
+/* ---------------------- */
+/* 대표 이미지 */
 /* ---------------------- */
 
 .preview-grid {
@@ -183,17 +185,14 @@
 .preview-item {
   position: relative;
   cursor: pointer;
-  border: 2px solid transparent;
   overflow: hidden;
-  transition: 0.2s;
-}
 
-.preview-item:hover {
-  transform: scale(1.03);
+  border: 2px solid transparent;
+  border-radius: 8px;
 }
 
 .preview-item.active {
-  border: 2px solid #4CAF50;
+  border: 2px solid #22c55e;
 }
 
 .preview-item img {
@@ -204,65 +203,78 @@
 }
 
 /* 삭제 버튼 */
+
 .delete-btn {
   position: absolute;
   top: 5px;
   right: 5px;
-  z-index: 999;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
+
   width: 24px;
   height: 24px;
-  cursor: pointer;
-  font-size: 14px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  cursor: pointer;
 }
 
-/* 대표 뱃지 */
+/* 대표 이미지 뱃지 */
+
 .badge {
   position: absolute;
   bottom: 5px;
   left: 5px;
-  background: #4CAF50;
+
+  background: #22c55e;
   color: white;
+
   font-size: 12px;
   padding: 2px 6px;
+
   border-radius: 5px;
   pointer-events: none;
 }
 
 /* ---------------------- */
-/* 버튼 */
+/* 등록 버튼 */
 /* ---------------------- */
 
 .submit-btn {
-  margin-top: 25px;
-  padding: 12px;
-  background: #4CAF50;
-  color: white;
+  display: block;
+
+  min-width: 180px;
+
+  margin: 24px auto 0;
+  padding: 12px 24px;
+
   border: none;
   border-radius: 8px;
-  cursor: pointer;
+
+  background: #2563eb;
+  color: white;
+
   font-size: 15px;
-  font-weight: bold;
-  transition: 0.2s;
+  font-weight: 600;
+
+  cursor: pointer;
 }
 
-.submit-btn:hover {
-  background: #43a047;
-}
+/* ---------------------- */
+/* 컬러 피커 */
+/* ---------------------- */
 
 .color-group {
   position: static;
-  /* 🔥 중요 */
   display: flex;
   border: none;
   overflow: visible;
-  /* 🔥 중요 */
 }
 
 .color-main {
@@ -274,8 +286,6 @@
 
 .color-arrow {
   width: 22px;
-  /* 최소 이 정도는 줘야 안 깨짐 */
-  padding: 0;
 
   display: flex;
   align-items: center;
@@ -284,36 +294,51 @@
 
 .color-arrow svg {
   width: 12px;
-  /* 🔥 아이콘 크기 고정 */
   height: 12px;
   flex-shrink: 0;
-  /* 🔥 이게 핵심 */
 }
 
 .color-dropdown {
   position: absolute;
 
   top: 100%;
-  /* 툴바 기준 */
   left: 300px;
-  /* 👉 A 버튼 위치에 맞게 조정 */
 
   width: 220px;
+
   background: white;
   border: 1px solid #ddd;
   border-radius: 12px;
+
   padding: 10px;
+
   z-index: 9999;
 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+.color-mode {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
 .color-mode button {
-  transition: 0.15s;
+  flex: 1;
+
+  padding: 5px;
+
+  border-radius: 6px;
+  border: 1px solid #ddd;
+
+  background: #f5f5f5;
+  cursor: pointer;
+
+  font-size: 12px;
 }
 
 .color-mode button.active {
-  background: #4CAF50;
+  background: #2563eb;
   color: white;
   font-weight: bold;
 }
@@ -327,22 +352,12 @@
 .color-box {
   width: 25px;
   height: 25px;
+
   border-radius: 4px;
   border: 1px solid #ddd;
+
   cursor: pointer;
   box-sizing: border-box;
-  transition: 0.15s;
-}
-
-.color-box:hover {
-  transform: scale(1.1);
-}
-
-.recent-colors {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
 }
 
 .color-box.text {
@@ -358,22 +373,35 @@
   margin-top: 15%;
 }
 
-.color-mode {
+.recent-colors {
   display: flex;
-  gap: 5px;
-  margin-bottom: 8px;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
-.color-mode button {
-  flex: 1;
-  padding: 5px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  background: #f5f5f5;
-  cursor: pointer;
-  font-size: 12px;
-}
+/* 모바일 */
 
-.color-mode button:hover {
-  background: #eaeaea;
+@media (max-width: 768px) {
+  .create-container {
+    padding: 16px;
+  }
+
+  .create-form {
+    padding: 16px;
+  }
+
+  .input-title,
+  .input-category,
+  .input-with-unit {
+    width: 100%;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
 }
