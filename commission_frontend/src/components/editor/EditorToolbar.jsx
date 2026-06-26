@@ -11,7 +11,7 @@ import {
   FaAlignRight,
 } from "react-icons/fa";
 
-import ColorPicker from "./ColorPicker";
+import ColorPicker from "../../features/commission/components/ColorPicker";
 
 export default function EditorToolbar({
   editor,
@@ -45,6 +45,7 @@ export default function EditorToolbar({
       />
 
       <button
+        type="button"
         className={editor.isActive("bold") ? "active" : ""}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
@@ -52,6 +53,7 @@ export default function EditorToolbar({
       </button>
 
       <button
+        type="button"
         className={editor.isActive("italic") ? "active" : ""}
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
@@ -59,6 +61,7 @@ export default function EditorToolbar({
       </button>
 
       <button
+        type="button"
         className={editor.isActive("strike") ? "active" : ""}
         onClick={() => editor.chain().focus().toggleStrike().run()}
       >
@@ -66,6 +69,7 @@ export default function EditorToolbar({
       </button>
 
       <button
+        type="button"
         className={
           editor.isActive("heading", { level: 1 })
             ? "active"
@@ -81,6 +85,7 @@ export default function EditorToolbar({
       <ColorPicker editor={editor} />
 
       <button
+        type="button"
         onClick={() =>
           editor.chain().focus().setTextAlign("left").run()
         }
@@ -89,6 +94,7 @@ export default function EditorToolbar({
       </button>
 
       <button
+        type="button"
         onClick={() =>
           editor.chain().focus().setTextAlign("center").run()
         }
@@ -97,6 +103,7 @@ export default function EditorToolbar({
       </button>
 
       <button
+        type="button"
         onClick={() =>
           editor.chain().focus().setTextAlign("right").run()
         }
@@ -105,6 +112,7 @@ export default function EditorToolbar({
       </button>
 
       <button
+        type="button"
         className={
           editor.isActive("bulletList") ? "active" : ""
         }
@@ -116,6 +124,7 @@ export default function EditorToolbar({
       </button>
 
       <button
+        type="button"
         className={
           editor.isActive("orderedList") ? "active" : ""
         }
@@ -126,7 +135,10 @@ export default function EditorToolbar({
         <FaListOl />
       </button>
 
-      <button onClick={handleEditorImage}>
+      <button
+        type="button"
+        onClick={handleEditorImage}
+      >
         <FaImage />
       </button>
     </div>

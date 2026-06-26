@@ -70,7 +70,7 @@ export default function Header() {
         </Link>
 
         <Link
-          to="/board"
+          to="/boards/free"
           className="menuItem"
         >
           게시판

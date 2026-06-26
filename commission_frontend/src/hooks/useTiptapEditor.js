@@ -7,7 +7,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { Extension } from "@tiptap/core";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
-import apiClient from "../../../services/apiClient";
+import apiClient from "../services/apiClient";
 
 export default function useTiptapEditor() {
   const [content, setContent] = useState("");

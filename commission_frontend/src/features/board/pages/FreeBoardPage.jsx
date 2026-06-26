@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getBoards } from "../api/boardApi";
+import styles from "./FreeBoardPage.module.css";
 
 export default function FreeBoardPage() {
-
   const [boards, setBoards] = useState([]);
 
   useEffect(() => {
@@ -20,26 +20,42 @@ export default function FreeBoardPage() {
   };
 
   return (
-    <div>
-      <h2>자유게시판</h2>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>자유게시판</h2>
 
-      <Link to="/boards/write">
-        글쓰기
-      </Link>
+        <Link
+          to="/boards/write"
+          className={styles.writeBtn}
+        >
+          글쓰기
+        </Link>
+      </div>
 
-      <hr />
-
-      {boards.map(board => (
-        <div key={board.id}>
-          <Link to={`/boards/${board.id}`}>
-            {board.title}
-          </Link>
-
-          <p>{board.writerNickname}</p>
-
-          <hr />
+      {boards.length === 0 ? (
+        <div className={styles.empty}>
+          등록된 게시글이 없습니다.
         </div>
-      ))}
+      ) : (
+        boards.map((board) => (
+          <Link
+            key={board.id}
+            to={`/boards/${board.id}`}
+            className={styles.card}
+          >
+            <div className={styles.boardTitle}>
+              {board.title}
+            </div>
+
+            <div className={styles.footer}>
+              <span>{board.writerNickname}</span>
+              <span>
+                {new Date(board.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+          </Link>
+        ))
+      )}
     </div>
   );
 }
