@@ -1,10 +1,16 @@
 package com.commission.commission.repository;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.commission.commission.dto.CommissionSearchDto;
 import com.commission.commission.entity.Commission;
 
 public interface CommissionRepositoryCustom {
-	List<Commission> search(CommissionSearchDto cond);
+	
+	Page<Commission> search(
+	        CommissionSearchDto cond,
+	        Pageable pageable
+	);
+	
 }

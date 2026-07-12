@@ -1,8 +1,10 @@
 package com.commission.commission.controller;
 
 import java.util.ArrayList; 
+
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +22,6 @@ import com.commission.commission.dto.CommissionResponseDto;
 import com.commission.commission.dto.CommissionSearchDto;
 import com.commission.commission.service.CommissionService;
 import com.commission.common.file.FileService;
-import com.commission.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 public class CommissionController {
 
 	private final CommissionService commissionService;
-	private final UserService userService;
     private final FileService fileService;
 
     @PostMapping("/create")
@@ -82,8 +82,14 @@ public class CommissionController {
     }
     
     @GetMapping
-    public ResponseEntity<?> getList(CommissionSearchDto cond) {
-        return ResponseEntity.ok(commissionService.search(cond));
+    public ResponseEntity<?> getList(
+            CommissionSearchDto cond,
+            Pageable pageable
+    ) {
+
+        return ResponseEntity.ok(
+                commissionService.search(cond, pageable)
+        );
     }
     
     @GetMapping("/my")

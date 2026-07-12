@@ -1,0 +1,110 @@
+.page {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.header {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.title {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #222;
+    word-break: break-word;
+}
+
+.info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #777;
+}
+
+.info span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.content {
+    padding: 36px 32px;
+    min-height: 320px;
+    line-height: 1.9;
+    font-size: 16px;
+    color: #333;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 32px;
+    border-top: 1px solid #f1f1f1;
+    background: #fafafa;
+}
+
+.leftButtons,
+.rightButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.listBtn {
+    background: #f3f4f6;
+    color: #333;
+}
+
+.listBtn:hover {
+    background: #e5e7eb;
+}
+
+.editBtn {
+    background: #2563eb;
+    color: white;
+}
+
+.editBtn:hover {
+    background: #1d4ed8;
+}
+
+.deleteBtn {
+    background: #dc2626;
+    color: white;
+}
+
+.deleteBtn:hover {
+    background: #b91c1c;
+}
+
+.content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px auto;
+}

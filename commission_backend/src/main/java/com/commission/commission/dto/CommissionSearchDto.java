@@ -17,4 +17,6 @@ public class CommissionSearchDto {
     private String category;
     private String sort;
     
+    private Integer page = 0;
+    private Integer size = 10;
 }

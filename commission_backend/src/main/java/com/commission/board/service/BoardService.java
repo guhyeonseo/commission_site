@@ -2,6 +2,8 @@ package com.commission.board.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,13 +49,32 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardResponse> getBoards(BoardType type) {
+    public Page<BoardResponse> getBoards(
+            BoardType type,
+            String keyword,
+            Pageable pageable) {
 
-        return boardRepository
-                .findByBoardTypeOrderByCreatedAtDesc(type)
-                .stream()
-                .map(BoardResponse::from)
-                .toList();
+        Page<Board> boards;
+
+        if (keyword == null || keyword.isBlank()) {
+
+            boards = boardRepository
+                    .findByBoardTypeOrderByCreatedAtDesc(
+                            type,
+                            pageable
+                    );
+
+        } else {
+
+        	boards = boardRepository.searchBoards(
+        	        type,
+        	        keyword,
+        	        pageable
+        	);
+
+        }
+
+        return boards.map(BoardResponse::from);
     }
 
     @Transactional(readOnly = true)

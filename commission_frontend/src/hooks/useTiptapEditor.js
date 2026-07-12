@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -7,22 +7,17 @@ import TextAlign from "@tiptap/extension-text-align";
 import { Extension } from "@tiptap/core";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
-import apiClient from "../services/apiClient";
 
-export default function useTiptapEditor() {
-  const [content, setContent] = useState("");
+export default function useTiptapEditor(
+  uploadImageApi,
+  initialContent = "<p>내용을 입력하세요...</p>"
+) {
+  const [content, setContent] = useState(initialContent);
   const [fontSize, setFontSize] = useState(14);
 
   const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = await apiClient.post(
-      "/commissions/upload",
-      formData
-    );
-
-    return "http://localhost:8484" + res.data;
+    const imageUrl = await uploadImageApi(file);
+    return "http://localhost:8484" + imageUrl;
   };
 
   const FontSize = Extension.create({
@@ -86,7 +81,7 @@ export default function useTiptapEditor() {
       }),
     ],
 
-    content: "<p>내용을 입력하세요...</p>",
+    content: initialContent,
 
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
@@ -128,6 +123,21 @@ export default function useTiptapEditor() {
       },
     },
   });
+
+  // 수정 페이지에서 기존 내용을 에디터에 표시
+  useEffect(() => {
+    if (!editor) return;
+
+    if (editor.getHTML() !== initialContent) {
+      editor.commands.setContent(
+        initialContent || "<p>내용을 입력하세요...</p>"
+      );
+
+      setContent(
+        initialContent || "<p>내용을 입력하세요...</p>"
+      );
+    }
+  }, [editor, initialContent]);
 
   const handleEditorImage = () => {
     const input = document.createElement("input");

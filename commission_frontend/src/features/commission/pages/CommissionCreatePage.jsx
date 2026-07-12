@@ -5,6 +5,7 @@ import "./CommissionCreatePage.css";
 import useTiptapEditor from "@/hooks/useTiptapEditor.js";
 import useThumbnailUpload from "../hooks/useThumbnailUpload";
 import { EditorContent } from "@tiptap/react";
+import { uploadCommissionImage } from "../api/commissionApi";
 
 import ThumbnailUploader from "../components/ThumbnailUploader";
 import EditorToolbar from "@/components/editor/EditorToolbar";
@@ -19,7 +20,7 @@ export default function CommissionCreatePage() {
     fontSize,
     setFontSize,
     handleEditorImage,
-  } = useTiptapEditor();
+  } = useTiptapEditor(uploadCommissionImage);
 
   const {
     files,

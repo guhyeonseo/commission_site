@@ -60,7 +60,7 @@ export default function EditorToolbar({
         <FaItalic />
       </button>
 
-      <button
+      <button 
         type="button"
         className={editor.isActive("strike") ? "active" : ""}
         onClick={() => editor.chain().focus().toggleStrike().run()}

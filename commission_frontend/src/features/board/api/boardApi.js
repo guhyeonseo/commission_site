@@ -1,9 +1,13 @@
 import apiClient from "../../../services/apiClient";
 
-export const getBoards = async (type) => {
-    const res = await apiClient.get(
-        `/boards?type=${type}`
-    );
+export const getBoards = async (type, params = {}) => {
+
+    const res = await apiClient.get("/boards", {
+        params: {
+            type,
+            ...params,
+        },
+    });
 
     return res.data;
 };
@@ -43,4 +47,18 @@ export const deleteBoard = async (
     await apiClient.delete(
         `/boards/${boardId}`
     );
+};
+
+export const uploadBoardImage = async (file) => {
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    const res = await apiClient.post(
+        "/boards/upload",
+        formData
+    );
+
+    return res.data;
 };

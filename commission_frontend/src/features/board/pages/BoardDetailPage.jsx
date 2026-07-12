@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getBoard, deleteBoard } from "../api/boardApi";
 import { useAuth } from "../../../context/AuthContext";
+import styles from "./BoardDetailPage.module.css";
 
 export default function BoardDetailPage() {
     const { auth } = useAuth();
@@ -61,50 +62,70 @@ export default function BoardDetailPage() {
         isWriter || isAdmin;
 
     return (
-        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-            <h2>{board.title}</h2>
+        <div className={styles.page}>
 
-            <hr />
+            <div className={styles.card}>
 
-            <div>
-                <strong>작성자</strong> : {board.writerNickname}
+                <div className={styles.header}>
+
+                    <h2 className={styles.title}>
+                        {board.title}
+                    </h2>
+
+                    <div className={styles.info}>
+                        <span>작성자 : {board.writerNickname}</span>
+                        <span>게시판 : 자유 게시판</span>
+                        <span>작성일 : {new Date(board.createdAt).toLocaleDateString()}</span>
+                    </div>
+
+                </div>
+
+                <div
+                    className={styles.content}
+                    dangerouslySetInnerHTML={{
+                        __html: board.content,
+                    }}
+                />
+
+                <div className={styles.footer}>
+
+                    <div className={styles.leftButtons}>
+
+                        <Link
+                            to="/boards/free"
+                            className={`${styles.btn} ${styles.listBtn}`}
+                        >
+                            목록
+                        </Link>
+
+                    </div>
+
+                    <div className={styles.rightButtons}>
+
+                        {isWriter && (
+                            <Link
+                                to={`/boards/edit/${board.id}`}
+                                className={`${styles.btn} ${styles.editBtn}`}
+                            >
+                                수정
+                            </Link>
+                        )}
+
+                        {canDelete && (
+                            <button
+                                onClick={handleDelete}
+                                className={`${styles.btn} ${styles.deleteBtn}`}
+                            >
+                                삭제
+                            </button>
+                        )}
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div>
-                <strong>게시판</strong> : {board.boardType}
-            </div>
-
-            <div>
-                <strong>작성일</strong> : {board.createdAt}
-            </div>
-
-            <hr />
-
-            <div
-                style={{
-                    minHeight: "300px",
-                    whiteSpace: "pre-wrap"
-                }}
-            >
-                {board.content}
-            </div>
-
-            <br />
-
-            {isWriter && (
-                <Link to={`/boards/edit/${board.id}`}>
-                    수정
-                </Link>
-            )}
-
-            {canDelete && (
-                <button
-                    onClick={handleDelete}
-                    style={{ marginLeft: "10px" }}
-                >
-                    삭제
-                </button>
-            )}
         </div>
     );
 }

@@ -3,6 +3,8 @@ package com.commission.commission.service;
 import java.util.ArrayList; 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -227,14 +229,14 @@ public class CommissionService {
 	    }
 	    
 	    @Transactional(readOnly = true)
-	    public List<CommissionResponseDto>
-	    search(CommissionSearchDto cond) {
+	    public Page<CommissionResponseDto> search(
+	            CommissionSearchDto cond,
+	            Pageable pageable
+	    ) {
 
 	        return commissionRepository
-	                .search(cond)
-	                .stream()
-	                .map(CommissionResponseDto::from)
-	                .toList();
+	                .search(cond, pageable)
+	                .map(CommissionResponseDto::from);
 	    }
 	    
 	    public void toggleStatus(

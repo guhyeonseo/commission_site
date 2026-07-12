@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { getCommissionList } from "../api/commissionApi.js";
+import SearchFilter from "@/components/common/SearchFilter/SearchFilter.jsx";
+import Pagination from "@/components/common/Pagination/Pagination.jsx";
 import { Link } from "react-router-dom";
 
 import "./CommissionListPage.css";
@@ -7,25 +9,35 @@ import "./CommissionListPage.css";
 export default function CommissionListPage() {
 
   const [list, setList] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const [keyword, setKeyword] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [category, setCategory] = useState("");
-  const [sort, setSort] = useState("latest");
+  const handleSearch = (newSearch) => {
+    setSearch(newSearch);
+    setPage(0);
+  };
+
+  const [search, setSearch] = useState({
+    keyword: "",
+    minPrice: "",
+    category: "",
+    sort: "latest",
+  });
 
   const fetchList = async () => {
 
     try {
 
-      const res =
-        await getCommissionList({
-          keyword,
-          minPrice,
-          category,
-          sort
-        });
+      const res = await getCommissionList({
+        ...search,
+        page,
+        size: 12,
+      });
 
-      setList(res.data);
+      console.log(res.data);
+
+      setList(res.data.content);
+      setTotalPages(res.data.totalPages);
 
     } catch (err) {
 
@@ -36,22 +48,14 @@ export default function CommissionListPage() {
   };
 
   useEffect(() => {
-    fetchList();
-  }, []);
 
-  useEffect(() => {
+    const delay = setTimeout(() => {
+      fetchList();
+    }, 300);
 
-    const delay =
-      setTimeout(() => {
+    return () => clearTimeout(delay);
 
-        fetchList();
-
-      }, 300);
-
-    return () =>
-      clearTimeout(delay);
-
-  }, [keyword, minPrice, category, sort]);
+  }, [search, page]);
 
   return (
 
@@ -70,77 +74,13 @@ export default function CommissionListPage() {
 
       </div>
 
-      <div className="filterBox">
-
-        <input
-          placeholder="검색어"
-          value={keyword}
-          onChange={(e) =>
-            setKeyword(e.target.value)
-          }
-        />
-
-        <input
-          type="number"
-          placeholder="최소 가격"
-          value={minPrice}
-          onChange={(e) =>
-            setMinPrice(e.target.value)
-          }
-        />
-
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="">전체</option>
-
-          <option value="COMIC">
-            만화
-          </option>
-
-          <option value="VIDEO">
-            영상
-          </option>
-
-          <option value="ILLUSTRATION">
-            일러스트
-          </option>
-
-          <option value="CHARACTER">
-            캐릭터
-          </option>
-
-          <option value="EMOTICON">
-            이모티콘
-          </option>
-
-          <option value="DESIGN">
-            디자인
-          </option>
-        </select>
-
-        <select
-          value={sort}
-          onChange={(e) =>
-            setSort(e.target.value)
-          }
-        >
-          <option value="latest">
-            최신순
-          </option>
-
-          <option value="priceAsc">
-            가격 낮은순
-          </option>
-
-          <option value="priceDesc">
-            가격 높은순
-          </option>
-
-        </select>
-
-      </div>
+      <SearchFilter
+        search={search}
+        setSearch={handleSearch}
+        usePrice
+        useCategory
+        useSort
+      />
 
       <div className="commissionGrid">
 
@@ -197,6 +137,12 @@ export default function CommissionListPage() {
         ))}
 
       </div>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
 
     </div>
 

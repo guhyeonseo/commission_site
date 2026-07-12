@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EditorContent } from "@tiptap/react";
-
+import { uploadBoardImage } from "../api/boardApi";
 import { createBoard } from "../api/boardApi";
 
 import EditorToolbar from "@/components/editor/EditorToolbar";
@@ -20,7 +20,7 @@ export default function BoardWritePage() {
     fontSize,
     setFontSize,
     handleEditorImage,
-  } = useTiptapEditor();
+  } = useTiptapEditor(uploadBoardImage);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
