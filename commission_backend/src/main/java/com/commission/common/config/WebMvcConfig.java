@@ -1,4 +1,4 @@
-package com.commission.config;
+package com.commission.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

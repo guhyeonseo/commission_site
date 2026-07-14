@@ -1,4 +1,4 @@
-package com.commission.config;
+package com.commission.common.config;
 
 import java.io.IOException;
 import java.util.List;

@@ -71,10 +71,14 @@ public class UserService {
         user.setNickname(dto.getNickname());
         user.setBio(dto.getBio());
 
+        System.out.println("Service imageUrl = " + imageUrl);
+        
         if (imageUrl != null) {
             fileService.deleteFile(user.getProfileImage());
             user.setProfileImage(imageUrl);
         }
+        
+        System.out.println("User profileImage = " + user.getProfileImage());
     }
     
     @Transactional

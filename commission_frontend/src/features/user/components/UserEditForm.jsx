@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { updateUser } from "@/features/user/api/userApi";
+import imageCompression from "browser-image-compression";
 import styles from "./UserEditForm.module.css";
 
 export default function UserEditForm({ user, onSuccess, onCancel }) {
@@ -11,9 +12,7 @@ export default function UserEditForm({ user, onSuccess, onCancel }) {
   const [file, setFile] = useState(null);
 
   const [preview, setPreview] = useState(
-    user.profileImage
-      ? `http://localhost:8484${user.profileImage}`
-      : null
+    user.profileImage || null
   );
 
   const handleChange = (e) => {
@@ -23,27 +22,32 @@ export default function UserEditForm({ user, onSuccess, onCancel }) {
     });
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const selected = e.target.files[0];
-
     if (!selected) return;
 
-    setFile(selected);
-    setPreview(URL.createObjectURL(selected));
+    const compressed = await imageCompression(selected, {
+      maxSizeMB: 0.5,
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    });
+
+    setFile(compressed);
+    setPreview(URL.createObjectURL(compressed));
   };
 
   const handleSubmit = async (e) => {
+
+    console.log(form);
+    console.log(JSON.stringify(form));
+
     e.preventDefault();
 
     try {
       const formData = new FormData();
 
-      formData.append(
-        "data",
-        new Blob([JSON.stringify(form)], {
-          type: "application/json",
-        })
-      );
+      formData.append("nickname", form.nickname);
+      formData.append("bio", form.bio);
 
       if (file) {
         formData.append("file", file);

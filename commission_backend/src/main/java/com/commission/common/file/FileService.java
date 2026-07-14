@@ -1,42 +1,53 @@
 package com.commission.common.file;
 
-import java.io.File;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class FileService {
 
-    public String saveFile(MultipartFile file, String type) throws Exception {
+    private final Cloudinary cloudinary;
 
-        String uploadDir = "C:/uploads/" + type + "/";
+    public String saveFile(MultipartFile file, String type) throws IOException {
 
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        Map<String, Object> uploadResult =
+                cloudinary.uploader().upload(
+                        file.getBytes(),
+                        ObjectUtils.asMap(
+                                "folder", type
+                        )
+                );
 
-        String original = file.getOriginalFilename();
-        if (original == null) {
-            throw new RuntimeException("파일 이름 없음");
-        }
+        System.out.println(uploadResult);
 
-        String fileName = UUID.randomUUID() + "_" + original;
-
-        File dest = new File(uploadDir + fileName);
-        file.transferTo(dest);
-
-        return "/uploads/" + type + "/" + fileName;
+        return uploadResult.get("secure_url").toString();
     }
-    
-    public void deleteFile(String filePath) {
-        if (filePath == null) return;
 
-        File file = new File("C:" + filePath);
-        if (file.exists()) {
-            file.delete();
+    public void deleteFile(String fileUrl) {
+
+        if (fileUrl == null || fileUrl.isBlank()) {
+            return;
+        }
+
+        try {
+            String publicId = fileUrl
+                    .substring(fileUrl.indexOf("/upload/") + 8)
+                    .replaceFirst("^v\\d+/", "")
+                    .replaceFirst("\\.[^.]+$", "");
+
+            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 삭제 실패", e);
         }
     }
 }

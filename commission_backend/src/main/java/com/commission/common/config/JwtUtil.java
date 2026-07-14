@@ -1,4 +1,4 @@
-package com.commission.config;
+package com.commission.common.config;
 
 import java.security.Key; 
 import java.util.Date;

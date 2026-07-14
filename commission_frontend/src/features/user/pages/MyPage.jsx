@@ -66,7 +66,7 @@ export default function MyPage() {
           <div className={styles.profileSection}>
             {user.profileImage && (
               <img
-                src={`http://localhost:8484${user.profileImage}`}
+                src={user.profileImage}
                 alt="프로필"
                 className={styles.profileImage}
               />

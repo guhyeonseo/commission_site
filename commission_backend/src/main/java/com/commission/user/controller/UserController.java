@@ -3,6 +3,7 @@ package com.commission.user.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +12,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping; 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.commission.commission.dto.CommissionResponseDto;
 import com.commission.commission.service.CommissionService;
+import com.commission.common.config.JwtUtil;
 import com.commission.common.file.FileService;
-import com.commission.config.JwtUtil;
 import com.commission.user.dto.LoginRequestDto;
 import com.commission.user.dto.PasswordUpdateRequestDto;
 import com.commission.user.dto.RegisterRequestDto;
@@ -158,20 +160,26 @@ public class UserController {
     }
     
     // 유저 정보 수정
-    @PatchMapping("/me")
+    @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUser(
-            Authentication auth,	
-            @RequestPart(value = "data") UserUpdateRequestDto dto,
+            Authentication auth,
+            @RequestParam("nickname") String nickname,
+            @RequestParam(value = "bio", required = false) String bio,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) throws Exception {
-    	
-    	Long userId = (Long) auth.getPrincipal();
+
+        UserUpdateRequestDto dto = new UserUpdateRequestDto();
+        dto.setNickname(nickname);
+        dto.setBio(bio);
+
+        Long userId = (Long) auth.getPrincipal();
 
         String imageUrl = null;
-
         if (file != null) {
             imageUrl = fileService.saveFile(file, "profile");
         }
+        
+        System.out.println("Controller imageUrl = " + imageUrl);
 
         userService.updateUser(userId, dto, imageUrl);
 

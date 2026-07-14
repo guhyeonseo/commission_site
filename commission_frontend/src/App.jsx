@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useContext } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 import { AuthProvider, AuthContext } from "./context/AuthContext";
@@ -156,6 +158,15 @@ function App() {
   return (
     <AuthProvider>
       <AppInner />
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        theme="light"
+      />
     </AuthProvider>
   );
 }

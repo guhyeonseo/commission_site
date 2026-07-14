@@ -5,8 +5,8 @@ export const getMyInfo = async () => {
   return res.data;
 };
 
-export const updateUser = async (data) => {
-  const res = await apiClient.patch("/user/me", data);
+export const updateUser = async (formData) => {
+  const res = await apiClient.patch("/user/me", formData);
   return res.data;
 };
 
