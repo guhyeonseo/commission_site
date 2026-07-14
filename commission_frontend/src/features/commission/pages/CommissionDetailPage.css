@@ -120,9 +120,10 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 12px;
+  transition: .2s;
 }
 
-.delete-btn:hover {
+.commission-delete-btn:hover {
 
   background: #c62828;
 }

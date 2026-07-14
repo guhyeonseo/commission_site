@@ -95,12 +95,12 @@ export default function CommissionListPage() {
             <div className="commissionCard">
 
               <img
-                src={`http://localhost:8484${c.thumbnailUrl}`}
+                src={c.thumbnailUrl}
                 alt=""
                 className="commissionImage"
-                onError={(e) =>
-                  (e.target.src = "/default.png")
-                }
+                onError={(e) => {
+                  e.target.src = "/default.png";
+                }}
               />
 
               <div className="commissionBody">

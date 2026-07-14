@@ -14,138 +14,123 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-	 @Bean
-	    public PasswordEncoder passwordEncoder() {
-	        return new BCryptPasswordEncoder();
-	    }
+    private final JwtUtil jwtUtil;
 
-	    @Bean
-	    public JwtUtil jwtUtil() {
-	        return new JwtUtil();
-	    }
+    public SecurityConfig(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
-	    @Bean
-	    public JwtFilter jwtFilter() {
-	        return new JwtFilter(jwtUtil());
-	    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	    @Bean
-	    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
-	        org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
+    @Bean
+    public JwtFilter jwtFilter() {
+        return new JwtFilter(jwtUtil);
+    }
 
-	        config.setAllowCredentials(true);
+    @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
 
-	        config.addAllowedOrigin("http://localhost:5173"); 
-	        config.addAllowedHeader("*");
-	        config.addAllowedMethod("*");
+        org.springframework.web.cors.CorsConfiguration config =
+                new org.springframework.web.cors.CorsConfiguration();
 
-	        config.addExposedHeader("Authorization");
+        config.setAllowCredentials(true);
 
-	        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
-	                new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        config.addAllowedOrigin("http://localhost:5173");
 
-	        source.registerCorsConfiguration("/**", config);
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
 
-	        return source;
-	    }
-	    
-	    @Bean
-	    public WebSecurityCustomizer webSecurityCustomizer() {
-	        return web -> web.ignoring().requestMatchers("/uploads/**");
-	    }
-	    
-	    @Bean
-	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        config.addExposedHeader("Authorization");
 
-	        http
-	            .csrf(csrf -> csrf.disable())
-	            .cors(cors -> {})
-	            .sessionManagement(session ->
-	                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	            )
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
+                new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
 
-	            .authorizeHttpRequests(auth -> auth
-	            		
-	                .requestMatchers(
-	                    "/api/user/login",
-	                    "/api/user/register",
-	                    "/api/user/refresh"
-	                ).permitAll()
-	                
-//	                .requestMatchers(
-//	                		HttpMethod.DELETE,
-//	                        "/api/commissions",
-//	                        "/api/commissions/**",
-//	                        "/api/inquiries/**"
-//	                    ).permitAll()
-	                
-	                .requestMatchers(
-	                	    "/favicon.ico",
-	                	    "/uploads/**",
-	                	    "/css/**",
-	                	    "/js/**",
-	                	    "/images/**"
-	                	).permitAll()
-	                
-	                .requestMatchers(
-	                	    HttpMethod.GET,
-	                	    "/api/commissions",
-	                	    "/api/commissions/**"
-	                	).permitAll()
-	                
-	                .requestMatchers(
-	                	    HttpMethod.GET,
-	                	    "/api/reviews/**"
-	                	).permitAll()
-	                
-	                .requestMatchers(
-	                	    HttpMethod.GET,
-	                	    "/api/inquiries/**"
-	                	).permitAll()
-	                
-	                .requestMatchers(
-	                	    HttpMethod.GET,
-	                	    "/api/user/*"
-	                	).permitAll()
-	                
-	                .requestMatchers(
-	                	    HttpMethod.GET,
-	                	    "/api/user/*/commissions"
-	                	).permitAll()
-	                
-	                .requestMatchers(
-	                	    "/ws/**",
-	                	    "/ws"
-	                	).permitAll()
-	                
-	                .requestMatchers(
-	                	    HttpMethod.GET,
-	                	    "/api/boards",
-	                	    "/api/boards/**"
-	                	).permitAll()
-	                
-	                .requestMatchers("/api/admin/**")
-	                .hasRole("ADMIN")
-	                
-//	                .requestMatchers(
-//	                	    HttpMethod.GET,
-//	                	    "/api/chat-rooms/**"
-//	                	).permitAll()
-	                
-	                .requestMatchers("/api/chat-rooms/**").permitAll()
-	                
-	                //임시 테스트용
-	                .requestMatchers(
-	                	    "/api/payments/**"
-	                	).permitAll()
-	                
-	                .requestMatchers("/uploads/**").permitAll()
-	                .anyRequest().authenticated()
-	            )
+        source.registerCorsConfiguration("/**", config);
 
-	            .addFilterBefore(jwtFilter(),
-	            	    UsernamePasswordAuthenticationFilter.class);
+        return source;
+    }
 
-	        return http.build();
-	    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers("/uploads/**");
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> {})
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+
+            .authorizeHttpRequests(auth -> auth
+
+                .requestMatchers(
+                        "/api/user/login",
+                        "/api/user/register",
+                        "/api/user/refresh"
+                ).permitAll()
+
+                .requestMatchers(
+                        "/favicon.ico",
+                        "/uploads/**",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**"
+                ).permitAll()
+
+                .requestMatchers(HttpMethod.GET,
+                        "/api/commissions",
+                        "/api/commissions/**"
+                ).permitAll()
+
+                .requestMatchers(HttpMethod.GET,
+                        "/api/reviews/**"
+                ).permitAll()
+
+                .requestMatchers(HttpMethod.GET,
+                        "/api/inquiries/**"
+                ).permitAll()
+
+                .requestMatchers(HttpMethod.GET,
+                        "/api/user/*"
+                ).permitAll()
+
+                .requestMatchers(HttpMethod.GET,
+                        "/api/user/*/commissions"
+                ).permitAll()
+
+                .requestMatchers("/ws/**", "/ws")
+                .permitAll()
+
+                .requestMatchers(HttpMethod.GET,
+                        "/api/boards",
+                        "/api/boards/**"
+                ).permitAll()
+
+                .requestMatchers("/api/admin/**")
+                .hasRole("ADMIN")
+
+                .requestMatchers("/api/chat-rooms/**")
+                .permitAll()
+
+                .requestMatchers("/api/payments/**")
+                .permitAll()
+
+                .anyRequest().authenticated()
+
+            )
+
+            .addFilterBefore(
+                    jwtFilter(),
+                    UsernamePasswordAuthenticationFilter.class
+            );
+
+        return http.build();
+    }
 }

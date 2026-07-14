@@ -15,10 +15,7 @@ export default function useTiptapEditor(
   const [content, setContent] = useState(initialContent);
   const [fontSize, setFontSize] = useState(14);
 
-  const uploadImage = async (file) => {
-    const imageUrl = await uploadImageApi(file);
-    return "http://localhost:8484" + imageUrl;
-  };
+  const uploadImage = (file) => uploadImageApi(file);
 
   const FontSize = Extension.create({
     name: "fontSize",

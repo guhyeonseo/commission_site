@@ -20,7 +20,7 @@ export default function Footer() {
 
         <div className="footerRight">
 
-          <p>이메일 : admin@example.com</p>
+          <p>이메일 : guhamsi@naver.com</p>
 
           <p>
             © 2026 Commission Platform

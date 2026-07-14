@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import "./SellerProfilePage.css";
 import {
     getSellerProfile,
     getSellerCommissions
@@ -42,49 +43,54 @@ export default function SellerProfilePage() {
     }
 
     return (
-        <div>
-            <h2>{seller.nickname}</h2>
+        <div className="seller-profile-container">
 
-            <p>{seller.introduction}</p>
+            <h2 className="seller-name">
+                {seller.nickname}
+            </h2>
 
-            <h3>등록한 커미션</h3>
+            <p className="seller-introduction">
+                {seller.introduction}
+            </p>
+
+            <h3 className="section-title">
+                등록한 커미션
+            </h3>
 
             {commissions.length === 0 ? (
-                <p>등록된 커미션이 없습니다.</p>
+                <p className="empty-message">
+                    등록된 커미션이 없습니다.
+                </p>
             ) : (
                 commissions.map((commission) => (
                     <div
                         key={commission.id}
+                        className="commission-card"
                         onClick={() =>
                             navigate(`/commission/${commission.id}`)
                         }
-                        style={{
-                            cursor: "pointer",
-                            border: "1px solid #ddd",
-                            padding: "10px",
-                            marginBottom: "10px",
-                            display: "flex",
-                            gap: "15px",
-                            alignItems: "center"
-                        }}
                     >
                         <img
-                            src={`http://localhost:8484${commission.thumbnailUrl}`}
-                            alt=""
-                            width="150"
+                            src={commission.thumbnailUrl}
+                            alt={commission.title}
+                            className="commission-thumbnail"
                         />
 
-                        <div>
-                            <h4>{commission.title}</h4>
+                        <div className="commission-info">
 
-                            <div>
+                            <h4 className="commission-title">
+                                {commission.title}
+                            </h4>
+
+                            <div className="commission-meta">
                                 ⭐ {commission.avgRating?.toFixed(1) ?? "0.0"}
                                 ({commission.reviewCount ?? 0}개)
                             </div>
 
-                            <div>
+                            <div className="commission-price">
                                 💰 {commission.price?.toLocaleString()}원
                             </div>
+
                         </div>
                     </div>
                 ))

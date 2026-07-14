@@ -160,7 +160,7 @@ export default function CommissionDetailPage() {
             }}
           >
             <img
-              src={`http://localhost:8484${data.images[currentIndex]}`}
+              src={data.images[currentIndex]}
               className="main-image"
               alt=""
             />
@@ -172,7 +172,7 @@ export default function CommissionDetailPage() {
 
               <img
                 key={index}
-                src={`http://localhost:8484${img}`}
+                src={data.images[currentIndex]}
                 className={
                   index === currentIndex
                     ? "active"
@@ -234,7 +234,7 @@ export default function CommissionDetailPage() {
             {canDelete && (
 
               <button
-                className="delete-btn"
+                className="commission-delete-btn"
                 onClick={async () => {
 
                   const ok =
