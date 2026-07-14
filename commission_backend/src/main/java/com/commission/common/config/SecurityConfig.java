@@ -1,6 +1,6 @@
 package com.commission.common.config;
 
-import org.springframework.context.annotation.Bean; 
+import org.springframework.context.annotation.Bean;  
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,7 +38,8 @@ public class SecurityConfig {
 
         config.setAllowCredentials(true);
 
-        config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOriginPattern("http://localhost:*");
+        config.addAllowedOriginPattern("https://*.vercel.app");
 
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");

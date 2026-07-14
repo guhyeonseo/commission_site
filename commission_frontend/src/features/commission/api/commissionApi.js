@@ -1,5 +1,4 @@
 import apiClient from "../../../services/apiClient";
-import axios from "axios";
 
 export const getCommissionList = (params) =>
   apiClient.get("/commissions", { params });
@@ -10,56 +9,21 @@ export const getCommissionDetail = (id) =>
 export const createCommission = (data) =>
   apiClient.post("/commissions/create", data);
 
-export const getMyCommissions =
-  async () => {
+export const getMyCommissions = async () => {
+  const response = await apiClient.get("/commissions/my");
+  return response.data;
+};
 
-    const response =
-      await axios.get(
-        "http://localhost:8484/api/commissions/my",
-        {
-          headers: {
-            Authorization:
-              `Bearer ${localStorage.getItem("accessToken")}`
-          }
-        }
-      );
+export const toggleCommissionStatus = async (commissionId) => {
+  await apiClient.patch(`/commissions/${commissionId}/toggle`);
+};
 
-    return response.data;
-  };
-
-export const toggleCommissionStatus =
-  async (commissionId) => {
-
-    await axios.patch(
-      `http://localhost:8484/api/commissions/${commissionId}/toggle`,
-      {},
-      {
-        headers: {
-          Authorization:
-            `Bearer ${localStorage.getItem("accessToken")}`
-        }
-      }
-    );
-  };
-
-export const deleteCommission =
-  async (commissionId) => {
-
-    await axios.delete(
-      `http://localhost:8484/api/commissions/${commissionId}`,
-      {
-        headers: {
-          Authorization:
-            `Bearer ${localStorage.getItem("accessToken")}`
-        }
-      }
-    );
-  };
+export const deleteCommission = async (commissionId) => {
+  await apiClient.delete(`/commissions/${commissionId}`);
+};
 
 export const uploadCommissionImage = async (file) => {
-
   const formData = new FormData();
-
   formData.append("file", file);
 
   const res = await apiClient.post(

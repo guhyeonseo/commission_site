@@ -24,7 +24,7 @@ export default function ChatPage() {
     }
 
     const socket = new SockJS(
-      "http://localhost:8484/ws"
+      `${import.meta.env.VITE_API_URL.replace("/api", "")}/ws`
     );
 
     const stompClient = new Client({
@@ -140,18 +140,16 @@ export default function ChatPage() {
               return (
                 <div
                   key={index}
-                  className={`${styles.messageRow} ${
-                    isMine
+                  className={`${styles.messageRow} ${isMine
                       ? styles.myMessage
                       : styles.otherMessage
-                  }`}
+                    }`}
                 >
                   <div
-                    className={`${styles.bubble} ${
-                      isMine
+                    className={`${styles.bubble} ${isMine
                         ? styles.myBubble
                         : styles.otherBubble
-                    }`}
+                      }`}
                   >
                     {!isMine && (
                       <div

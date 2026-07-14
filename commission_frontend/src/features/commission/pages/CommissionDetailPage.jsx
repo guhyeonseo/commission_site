@@ -110,15 +110,10 @@ export default function CommissionDetailPage() {
     );
 
   const fixedDescription =
-    data.description
-      ?.replace(
-        /src="(?!http)(\/?uploads\/)/g,
-        'src="http://localhost:8484/$1'
-      )
-      ?.replace(
-        /src="blob:[^"]*"/g,
-        ""
-      );
+    data.description?.replace(
+      /src="blob:[^"]*"/g,
+      ""
+    );
 
   return (
 

@@ -10,6 +10,9 @@ import { createReview } from "@/features/review/api/reviewApi";
 import styles from "./BuyerOrderPage.module.css";
 
 export default function BuyerOrderPage() {
+
+  const API_BASE = import.meta.env.VITE_API_URL.replace("/api", "");
+
   const [list, setList] = useState([]);
   const [reviewData, setReviewData] = useState({});
 
@@ -132,7 +135,7 @@ export default function BuyerOrderPage() {
             {item.status === "WORK_DONE" && (
               <div className={styles.buttonGroup}>
                 <a
-                  href={`http://localhost:8484${item.resultUrl}`}
+                  href={`${API_BASE}${item.resultUrl}`}
                   download
                   target="_blank"
                   rel="noreferrer"

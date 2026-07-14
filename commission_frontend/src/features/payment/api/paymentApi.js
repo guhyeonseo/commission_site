@@ -1,142 +1,53 @@
-import axios from "axios";
+import apiClient from "../../../services/apiClient";
 
-const API_URL = "http://localhost:8484/api/payments";
-
-export const createPayment = async (
-  commissionId
-) => {
-
-  const response = await axios.post(
-    `${API_URL}/create`,
-    {
-      commissionId
-    },
-    {
-      headers: {
-        Authorization:
-          `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    }
-  );
+export const createPayment = async (commissionId) => {
+  const response = await apiClient.post("/payments/create", {
+    commissionId,
+  });
 
   return response.data;
 };
 
 export const confirmPayment = async (data) => {
-
-  const response = await axios.post(
-    `${API_URL}/confirm`,
-    data
-  );
-
+  const response = await apiClient.post("/payments/confirm", data);
   return response.data;
 };
 
 export const getArtistOrders = async () => {
-
-  return axios.get(
-    "http://localhost:8484/api/payments/artist",
-    {
-      headers: {
-        Authorization:
-          `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    }
-  );
+  return apiClient.get("/payments/artist");
 };
 
 export const workDone = async (paymentId) => {
-
-  return axios.patch(
-    `http://localhost:8484/api/payments/${paymentId}/work-done`,
-    {},
-    {
-      headers: {
-        Authorization:
-          `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    }
-  );
+  return apiClient.patch(`/payments/${paymentId}/work-done`);
 };
 
 export const getBuyerOrders = async () => {
-
-  return axios.get(
-    "http://localhost:8484/api/payments/buyer",
-    {
-      headers: {
-        Authorization:
-          `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    }
-  );
+  return apiClient.get("/payments/buyer");
 };
 
-export const completePayment = async (
-  paymentId
-) => {
-
-  return axios.patch(
-    `http://localhost:8484/api/payments/${paymentId}/complete`,
-    {},
-    {
-      headers: {
-        Authorization:
-          `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    }
-  );
+export const completePayment = async (paymentId) => {
+  return apiClient.patch(`/payments/${paymentId}/complete`);
 };
 
-export const cancelPayment = async (
-  paymentId
-) => {
-
-  return axios.patch(
-    `http://localhost:8484/api/payments/${paymentId}/cancel`,
-    {},
-    {
-      headers: {
-        Authorization:
-          `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    }
-  );
+export const cancelPayment = async (paymentId) => {
+  return apiClient.patch(`/payments/${paymentId}/cancel`);
 };
 
-export const uploadResult = async (
-  paymentId,
-  file
-) => {
-
+export const uploadResult = async (paymentId, file) => {
   const formData = new FormData();
-
   formData.append("file", file);
 
-  return axios.patch(
-    `http://localhost:8484/api/payments/${paymentId}/result`,
+  return apiClient.patch(
+    `/payments/${paymentId}/result`,
     formData,
     {
       headers: {
-        Authorization:
-          `Bearer ${localStorage.getItem("accessToken")}`,
-        "Content-Type":
-          "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     }
   );
 };
 
 export const startWork = async (paymentId) => {
-
-  return axios.patch(
-    `http://localhost:8484/api/payments/${paymentId}/start`,
-    {},
-    {
-      headers: {
-        Authorization:
-          `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    }
-  );
+  return apiClient.patch(`/payments/${paymentId}/start`);
 };

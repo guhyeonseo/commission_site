@@ -5,6 +5,8 @@ const apiClient = axios.create({
   withCredentials: true
 });
 
+console.log(import.meta.env.VITE_API_URL)
+
 // 요청 인터셉터
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
