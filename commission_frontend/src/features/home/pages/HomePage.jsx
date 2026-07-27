@@ -25,8 +25,8 @@ export default function HomePage() {
         </h1>
 
         <p>
-          일러스트, 디자인, 웹 개발,
-          번역 등 다양한 커미션을
+          일러스트, 디자인, 만화
+           등 다양한 커미션을
           만나보세요.
         </p>
 
@@ -70,7 +70,7 @@ export default function HomePage() {
         <div className="featureCard">
           <h3>💬 실시간 채팅</h3>
           <p>
-            의뢰 전 판매자와
+            의뢰가 시작되면 판매자와
             자유롭게 상담할 수 있습니다.
           </p>
         </div>
