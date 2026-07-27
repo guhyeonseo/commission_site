@@ -234,9 +234,17 @@ public class CommissionService {
 	            Pageable pageable
 	    ) {
 
-	        return commissionRepository
-	                .search(cond, pageable)
-	                .map(CommissionResponseDto::from);
+	    	return commissionRepository
+	    	        .search(cond, pageable)
+	    	        .map(c -> {
+
+	    	            CommissionResponseDto dto = CommissionResponseDto.from(c);
+
+	    	            userRepository.findById(c.getUserId())
+	    	                    .ifPresent(user -> dto.setNickname(user.getNickname()));
+
+	    	            return dto;
+	    	        });
 	    }
 	    
 	    public void toggleStatus(

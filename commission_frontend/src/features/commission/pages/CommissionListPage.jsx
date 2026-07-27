@@ -109,6 +109,10 @@ export default function CommissionListPage() {
                   {c.title}
                 </h3>
 
+                <div className="commissionWriter">
+                  작성자 : {c.nickname}
+                </div>
+
                 <div className="commissionMeta">
 
                   별점⭐ {c.avgRating?.toFixed(1) ?? 0}
