@@ -129,7 +129,7 @@ export default function BuyerOrderPage() {
             {item.status === "WORK_DONE" && (
               <div className={styles.buttonGroup}>
                 <a
-                  href={`${API_BASE}${item.resultUrl}`}
+                  href={item.resultUrl}
                   download
                   target="_blank"
                   rel="noreferrer"
