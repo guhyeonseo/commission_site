@@ -10,7 +10,6 @@ import { createReview } from "@/features/review/api/reviewApi";
 import styles from "./BuyerOrderPage.module.css";
 
 export default function BuyerOrderPage() {
-
   const API_BASE = import.meta.env.VITE_API_URL.replace("/api", "");
 
   const [list, setList] = useState([]);
@@ -18,6 +17,10 @@ export default function BuyerOrderPage() {
 
   const load = async () => {
     const res = await getBuyerOrders();
+
+    console.log(res.data);
+    console.log(res.data[0]?.resultUrl); 
+
     setList(res.data);
   };
 
@@ -69,11 +72,7 @@ export default function BuyerOrderPage() {
     }
   };
 
-  const handleReviewChange = (
-    paymentId,
-    field,
-    value
-  ) => {
+  const handleReviewChange = (paymentId, field, value) => {
     setReviewData((prev) => ({
       ...prev,
       [paymentId]: {
@@ -106,15 +105,10 @@ export default function BuyerOrderPage() {
       <h2 className={styles.title}>내 주문</h2>
 
       {list.length === 0 ? (
-        <div className={styles.empty}>
-          주문 내역이 없습니다.
-        </div>
+        <div className={styles.empty}>주문 내역이 없습니다.</div>
       ) : (
         list.map((item) => (
-          <div
-            key={item.id}
-            className={styles.card}
-          >
+          <div key={item.id} className={styles.card}>
             <div className={styles.row}>
               <span>커미션</span>
               <strong>{item.commissionTitle}</strong>
@@ -125,7 +119,7 @@ export default function BuyerOrderPage() {
 
               <span
                 className={`${styles.statusBadge} ${getStatusClass(
-                  item.status
+                  item.status,
                 )}`}
               >
                 {getStatusText(item.status)}
@@ -147,78 +141,54 @@ export default function BuyerOrderPage() {
 
                 <button
                   className={styles.completeBtn}
-                  onClick={() =>
-                    handleComplete(item.id)
-                  }
+                  onClick={() => handleComplete(item.id)}
                 >
                   구매 확정
                 </button>
 
                 <button
                   className={styles.cancelBtn}
-                  onClick={() =>
-                    handleCancel(item.id)
-                  }
+                  onClick={() => handleCancel(item.id)}
                 >
                   주문 취소
                 </button>
               </div>
             )}
 
-            {item.status === "COMPLETED" &&
-              !item.reviewed && (
-                <div className={styles.reviewBox}>
-                  <input
-                    type="number"
-                    min="0"
-                    max="5"
-                    step="0.5"
-                    placeholder="별점"
-                    value={
-                      reviewData[item.id]
-                        ?.rating ?? 5
-                    }
-                    onChange={(e) =>
-                      handleReviewChange(
-                        item.id,
-                        "rating",
-                        e.target.value
-                      )
-                    }
-                  />
+            {item.status === "COMPLETED" && !item.reviewed && (
+              <div className={styles.reviewBox}>
+                <input
+                  type="number"
+                  min="0"
+                  max="5"
+                  step="0.5"
+                  placeholder="별점"
+                  value={reviewData[item.id]?.rating ?? 5}
+                  onChange={(e) =>
+                    handleReviewChange(item.id, "rating", e.target.value)
+                  }
+                />
 
-                  <textarea
-                    placeholder="리뷰 내용을 입력해주세요"
-                    value={
-                      reviewData[item.id]
-                        ?.content ?? ""
-                    }
-                    onChange={(e) =>
-                      handleReviewChange(
-                        item.id,
-                        "content",
-                        e.target.value
-                      )
-                    }
-                  />
+                <textarea
+                  placeholder="리뷰 내용을 입력해주세요"
+                  value={reviewData[item.id]?.content ?? ""}
+                  onChange={(e) =>
+                    handleReviewChange(item.id, "content", e.target.value)
+                  }
+                />
 
-                  <button
-                    className={styles.reviewBtn}
-                    onClick={() =>
-                      handleReview(item.id)
-                    }
-                  >
-                    리뷰 작성
-                  </button>
-                </div>
-              )}
+                <button
+                  className={styles.reviewBtn}
+                  onClick={() => handleReview(item.id)}
+                >
+                  리뷰 작성
+                </button>
+              </div>
+            )}
 
-            {item.status === "COMPLETED" &&
-              item.reviewed && (
-                <div className={styles.reviewDone}>
-                  ✅ 리뷰 작성 완료
-                </div>
-              )}
+            {item.status === "COMPLETED" && item.reviewed && (
+              <div className={styles.reviewDone}>✅ 리뷰 작성 완료</div>
+            )}
           </div>
         ))
       )}
