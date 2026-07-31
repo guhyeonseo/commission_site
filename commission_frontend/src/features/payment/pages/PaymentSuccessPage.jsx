@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 import { confirmPayment } from "../api/paymentApi";
 
 export default function PaymentSuccessPage() {
 
   const [params] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -30,6 +31,8 @@ export default function PaymentSuccessPage() {
 
         alert("결제 성공");
 
+        navigate("/buyer/orders"); 
+        
       } catch (error) {
 
         console.error(error);
