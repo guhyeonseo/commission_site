@@ -49,3 +49,33 @@
 .loginButton:hover {
     background-color: #409444;
 }
+
+
+
+@media (max-width: 768px) {
+
+  .loginForm {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  .loginDiv {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .loginInput {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .loginButton {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
