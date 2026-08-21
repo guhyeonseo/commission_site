@@ -99,3 +99,36 @@
 
   margin-right: 5px;
 }
+
+/* 모바일 css */
+@media (max-width: 768px) {
+
+  .headerContainer {
+    height: 60px;
+    padding: 0 15px;
+  }
+
+  .leftMenu {
+    gap: 5px;
+  }
+
+  .rightMenu {
+    gap: 3px;
+  }
+
+  .logo {
+    height: 32px;
+  }
+
+  .menuItem,
+  .menuButton {
+    padding: 7px 8px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .nickname {
+    font-size: 12px;
+    margin-right: 0;
+  }
+}
